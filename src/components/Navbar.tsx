@@ -18,9 +18,11 @@ const Navbar = () => {
           <FaBars className="w-6 h-6" />
         </button>
 
+
         <div className="sm:hidden text-white font-ibrand text-lg">
           <h2>Eventra</h2>
         </div>
+
 
         <div className="hidden sm:flex sm:ml-auto space-x-4">
           <Link href="/about" className="text-white hover:underline">
@@ -39,8 +41,10 @@ const Navbar = () => {
       </nav>
 
       <nav className="flex flex-col sm:flex-row items-center bg-customMediumBlue px-4 sm:px-6 py-6 w-full text-lg">
+
         <div className="hidden sm:block text-white font-ibrand text-4xl">
           Eventra
+
         </div>
 
         <div className="flex-1 flex justify-center mt-4 sm:mt-0 sm:relative sm:top-0 relative top-[-15px]">
@@ -72,6 +76,7 @@ const Navbar = () => {
             <span>Jelajah</span>
           </Link>
           <button className="bg-[#2d3250] text-white px-4 py-2 rounded-md border-[1px] border-white">
+
             <a href="/sign-up" className="font-ibrand">
               Daftar
             </a>
@@ -80,6 +85,8 @@ const Navbar = () => {
             <a href="/sign-in" className="font-ibrand">
               Masuk
             </a>
+
+           
           </button>
         </div>
 
