@@ -70,10 +70,10 @@ const Navbar = () => {
             <span>Jelajah</span>
           </Link>
           <button className="bg-[#2d3250] text-white px-4 py-2 rounded-md border-[1px] border-white">
-            Daftar
+            <a href="/sign-up">Daftar</a>
           </button>
           <button className="bg-[#676f9d] text-white px-4 py-2 rounded-md">
-            Masuk
+            <a href="/sign-in">Masuk</a>
           </button>
         </div>
 
