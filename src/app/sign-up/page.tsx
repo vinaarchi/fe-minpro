@@ -1,35 +1,44 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import FormInput from "@/components/FormInput";
+import { Formik, Form, FormikProps } from "formik";
+import { ISignUpValue } from "./type";
 
-const signUp = () => {
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { error } from "console";
+import { callAPI } from "@/config/axios";
+
+interface ISignUpPageProps {}
+interface FormValue {
+  fullname: string;
+  username: string;
+  email: string;
+  password: string;
+  role: "customer" | "organizer";
+}
+
+const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
+  const onSignUp = async (values: FormValue) => {
+    try {
+      const res = await callAPI.post("/user/register", {
+        fullname: values.fullname,
+        username: values.username,
+        email: values.email,
+        password: values.password,
+        role: values.role,
+      });
+      alert(res.data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div>
-      <div className="bg-customDarkBlue p-8 shadow-md">
-        <h1 className="font-ibrand text-center text-white text-5xl ">
-          <a href="/">Eventra</a>
-        </h1>
-      </div>
-      <div className="flex justify-center m-24">
+    <div className="m-10 p-10">
+      <div className="flex justify-center m-5">
         <div className="flex flex-col items-center p-5">
           <Image
             src="/images/signup.png"
@@ -46,57 +55,100 @@ const signUp = () => {
             event di Eventra
           </p>
         </div>
-        <Card className="w-[450px]">
-          <CardHeader>
-            <CardTitle className="font-congrates font-light text-2xl">
-              Create Your Personal Account
-            </CardTitle>
-            <CardDescription>Please Enter Your Personal Info</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form>
-              <div className="grid w-full items-center gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Fullname</Label>
-                  <Input id="name" placeholder="Enter your fullname" />
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Username</Label>
-                  <Input id="name" placeholder="Enter your username" />
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Email</Label>
-                  <Input id="name" placeholder="Enter your email" />
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Password</Label>
-                  <Input id="name" placeholder="Enter your password" />
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="framework">Pick a Role</Label>
-                  <Select>
-                    <SelectTrigger id="framework">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent position="popper">
-                      <SelectItem value="next">Customer</SelectItem>
-                      <SelectItem value="sveltekit">Organizer</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </form>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button variant="outline">Cancel</Button>
-            <Button>Create Now</Button>
-          </CardFooter>
-          <div className="text-center mb-5">
-            <a href="/sign-in" className="hover:text-customOrange">
-              Already have account? Sign In Now
-            </a>
-          </div>
-        </Card>
+        <div className="space-y-5">
+          <Card className="w-[500px] p-12">
+            <h1 className="font-ibrand text-3xl text-customDarkBlue text-center">
+              Buat akunmu sekarang juga !
+            </h1>
+            <div className="flex justify-center text-center mb-5 space-x-2">
+              <p>Sudah punya akun?</p>
+              <a href="/sign-up" className="text-customLightBlue">
+                Masuk!
+              </a>
+            </div>
+            <CardContent>
+              <Formik
+                validationSchema={signUp}
+                initialValues={{
+                  fullname: "",
+                  username: "",
+                  email: "",
+                  password: "",
+                  role: "customer",
+                }}
+                onSubmit={(values, { resetForm }) => {
+                  console.log("Values from input formik :", values);
+                  onSignUp(values);
+                  resetForm();
+                }}
+              >
+                {(props: FormikProps<ISignUpValue>) => {
+                  const { values, handleChange, errors } = props;
+                  console.log("error formik", errors);
+
+                  return (
+                    <Form>
+                      <div>
+                        <FormInput
+                          name="fullname"
+                          type="text"
+                          label="First name"
+                          onChange={handleChange}
+                          value={values.fullname}
+                        />
+                        <FormInput
+                          name="username"
+                          type="text"
+                          label="Username"
+                          onChange={handleChange}
+                          value={values.username}
+                        />
+                        <FormInput
+                          name="email"
+                          type="text"
+                          label="Email"
+                          onChange={handleChange}
+                          value={values.email}
+                        />
+                        <FormInput
+                          name="password"
+                          type="password"
+                          label="Password"
+                          onChange={handleChange}
+                          value={values.password}
+                        />
+                        <div className="mt-4">
+                          <label htmlFor="role" className="font-bold">
+                            Role
+                          </label>
+                          <select
+                            name="role"
+                            id="role"
+                            value={values.role}
+                            onChange={handleChange}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-customMediumBlue focus:border-black sm:text-sm"
+                          >
+                            <option value="customer">Customer</option>
+                            <option value="organizer">Organizer</option>
+                          </select>
+                        </div>
+                        <div className="flex justify-center items-center gap-4">
+                          <Button
+                            type="submit"
+                            className="bg-customMediumBlue text-white px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-full shadow"
+                          >
+                            Sign Up
+                          </Button>
+                          <p className="text-sm">Sudah punya akun ?</p>
+                        </div>
+                      </div>
+                    </Form>
+                  );
+                }}
+              </Formik>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
