@@ -8,8 +8,8 @@ import {
   CarouselContent,
   CarouselPrevious,
   CarouselNext,
-} from "../ui/carousel";
-import { Card } from "../ui/card";
+} from "../components/ui/carousel";
+import { Card } from "../components/ui/card";
 
 const Hero = () => {
   return (
