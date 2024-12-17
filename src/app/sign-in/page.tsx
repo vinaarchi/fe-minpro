@@ -85,7 +85,7 @@ const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
             <p>
               Login sekarang dan nikmati fitur menarik yang sudah menunggumu!
             </p>
-          </div>
+          </div> ;
         </div>
       </div>
     </div>
