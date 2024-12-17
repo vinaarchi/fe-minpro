@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { setSignIn } from "@/lib/redux/features/userSlice";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
+import Footer2 from "@/components/Footer2";
+
 
 interface ISignInPageProps {}
 
@@ -85,9 +87,11 @@ const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
             <p>
               Login sekarang dan nikmati fitur menarik yang sudah menunggumu!
             </p>
-          </div> ;
+          </div>
+          ;
         </div>
       </div>
+      <Footer2 />
     </div>
   );
 };
