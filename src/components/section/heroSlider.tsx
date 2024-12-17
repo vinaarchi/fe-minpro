@@ -2,30 +2,57 @@
 
 import Image from "next/image";
 import * as React from "react";
-import Slider from "react-slick";
 import {
   Carousel,
-  CarouselContent,
   CarouselItem,
-  CarouselNext,
+  CarouselContent,
   CarouselPrevious,
+  CarouselNext,
 } from "../ui/carousel";
-import { Card, CardContent } from "../ui/card";
+import { Card } from "../ui/card";
 
 const Hero = () => {
   return (
     <div className="m-10 p-5">
       <Carousel>
-        <Card>
-          <CardContent className="flex aspect-auto items-center justify-center p-44">
+        <CarouselContent>
+          <CarouselItem>
             <Image
-              src="/images/lany.jpg"
+              src="/images/keshi.png"
               alt="Banner1"
-              layout="fill"
-              objectFit="cover"
+              width={1000}
+              height={1000}
+              className="rounded-md"
             />
-          </CardContent>
-        </Card>
+          </CarouselItem>
+          <CarouselItem>
+            <Image
+              src="/images/yoasobi.png"
+              alt="Banner2"
+              width={1000}
+              height={1000}
+              className="rounded-md"
+            />
+          </CarouselItem>
+          <CarouselItem>
+            <Image
+              src="/images/conct2.jpg"
+              alt="Banner3"
+              width={2000}
+              height={1000}
+              className="rounded-md"
+            />
+          </CarouselItem>
+          <CarouselItem>
+            <Image
+              src="/images/swara.png"
+              alt="Banner3"
+              width={900}
+              height={1000}
+              className="rounded-md"
+            />
+          </CarouselItem>
+        </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
