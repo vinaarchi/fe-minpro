@@ -20,8 +20,8 @@ const Hero = () => {
             <Image
               src="/images/keshi.png"
               alt="Banner1"
-              width={1000}
-              height={1000}
+              width={2000}
+              height={500}
               className="rounded-md"
             />
           </CarouselItem>
@@ -29,7 +29,7 @@ const Hero = () => {
             <Image
               src="/images/yoasobi.png"
               alt="Banner2"
-              width={1000}
+              width={2000}
               height={1000}
               className="rounded-md"
             />

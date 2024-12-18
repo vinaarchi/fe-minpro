@@ -19,17 +19,17 @@ const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
 
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const onSignIn = async () => {
-  //   try {
-  //     const response = await callAPI.post(`/user/sign-in`, { email, password });
-  //     console.log("CHECK SIGNIN RESPONSE :", response.data);
-  //     dispatch(setSignIn({ ...response.data, isAuth: true }));
-  //     localStorage.setItem("tkn", response.data.message);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
+    try {
+      const response = await callAPI.post(`/user/sign-in`, { email, password });
+      console.log("CHECK SIGNIN RESPONSE :", response.data);
+      dispatch(setSignIn({ ...response.data, isAuth: true }));
+      localStorage.setItem("tkn", response.data.message);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div>

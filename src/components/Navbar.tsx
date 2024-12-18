@@ -1,14 +1,46 @@
 "use client";
+
+import * as React from "react";
 import Link from "next/link";
 import { FaSearch, FaCalendarAlt, FaCompass, FaBars } from "react-icons/fa";
 import { useState } from "react";
+import { LanguageContext } from "@/context/LanguageContext";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { callAPI } from "@/config/axios";
+import { setSignIn } from "@/lib/redux/features/userSlice";
+interface INavbarProps {}
 
-const Navbar = () => {
+const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.userReducer);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
+  const keepLogin = async () => {
+    try {
+      const token = localStorage.getItem("tkn");
+      if (token) {
+        const response = await callAPI.get(`/user/keep-login`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log("CHECK SIGN IN RESPONSE :", response.data);
+        dispatch(setSignIn({ ...response.data, isAuth: true }));
+        localStorage.setItem("tkn", response.data.token);
+      } else {
+        dispatch(setSignIn({ isAuth: false }));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  React.useEffect(() => {
+    keepLogin();
+  }, []);
 
   return (
     <>
@@ -17,13 +49,9 @@ const Navbar = () => {
         <button className="text-white sm:hidden" onClick={toggleMobileMenu}>
           <FaBars className="w-6 h-6" />
         </button>
-
-
         <div className="sm:hidden text-white font-ibrand text-lg">
           <h2>Eventra</h2>
         </div>
-
-
         <div className="hidden sm:flex sm:ml-auto space-x-4">
           <Link href="/about" className="text-white hover:underline">
             Tentang Eventra
@@ -41,10 +69,8 @@ const Navbar = () => {
       </nav>
 
       <nav className="flex flex-col sm:flex-row items-center bg-customMediumBlue px-4 sm:px-6 py-6 w-full text-lg">
-
         <div className="hidden sm:block text-white font-ibrand text-4xl">
           Eventra
-
         </div>
 
         <div className="flex-1 flex justify-center mt-4 sm:mt-0 sm:relative sm:top-0 relative top-[-15px]">
@@ -76,7 +102,6 @@ const Navbar = () => {
             <span>Jelajah</span>
           </Link>
           <button className="bg-[#2d3250] text-white px-4 py-2 rounded-md border-[1px] border-white">
-
             <a href="/sign-up" className="font-ibrand">
               Daftar
             </a>
@@ -85,8 +110,6 @@ const Navbar = () => {
             <a href="/sign-in" className="font-ibrand">
               Masuk
             </a>
-
-           
           </button>
         </div>
 
