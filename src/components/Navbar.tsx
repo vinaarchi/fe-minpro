@@ -101,16 +101,26 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
             <FaCompass className="w-5 h-5 text-white" />
             <span>Jelajah</span>
           </Link>
-          <button className="bg-[#2d3250] text-white px-4 py-2 rounded-md border-[1px] border-white">
-            <a href="/sign-up" className="font-ibrand">
-              Daftar
-            </a>
-          </button>
-          <button className="bg-[#676f9d] text-white px-4 py-2 rounded-md">
-            <a href="/sign-in" className="font-ibrand">
-              Masuk
-            </a>
-          </button>
+          <ul>
+            <li className="flex gap-2">
+              {user.email ? (
+                <p className="text-white font-ibrand">{user.email}</p>
+              ) : (
+                <>
+                  <button className="bg-[#2d3250] text-white px-4 py-2 rounded-md border-[1px] border-white">
+                    <a href="/sign-up" className="font-ibrand">
+                      Daftar
+                    </a>
+                  </button>
+                  <button className="bg-[#676f9d] text-white px-4 py-2 rounded-md">
+                    <a href="/sign-in" className="font-ibrand">
+                      Masuk
+                    </a>
+                  </button>
+                </>
+              )}
+            </li>
+          </ul>
         </div>
 
         {isMobileMenuOpen && (
@@ -127,6 +137,7 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
             <Link href="/contact-us" className="text-white hover:underline">
               Hubungi kami
             </Link>
+            
           </div>
         )}
       </nav>

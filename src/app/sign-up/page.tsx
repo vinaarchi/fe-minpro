@@ -40,11 +40,6 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
 
   return (
     <div>
-      <div className="bg-customDarkBlue p-8 shadow-md">
-        <h1 className="font-ibrand text-center text-white text-5xl ">
-          <a href="/">Eventra</a>
-        </h1>
-      </div>
       <div className="m-8 p-10">
         <div className="flex justify-center m-5">
           <div className="flex flex-col items-center p-5">

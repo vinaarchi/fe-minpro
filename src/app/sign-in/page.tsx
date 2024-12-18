@@ -34,11 +34,6 @@ const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
   return (
     <div>
       <div>
-        <div className="bg-customDarkBlue p-8 shadow-md">
-          <h1 className="font-ibrand text-center text-white text-5xl ">
-            <a href="/">Eventra</a>
-          </h1>
-        </div>
         <div className="flex justify-center m-24">
           <Card className="w-[450px] p-12">
             <h1 className="font-ibrand text-4xl text-customDarkBlue text-center">
