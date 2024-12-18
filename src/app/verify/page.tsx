@@ -21,6 +21,9 @@ const Verify: React.FunctionComponent<IVerifyProps> = (props) => {
             console.log(error)
         }
     }
+    React.useEffect(()=> {
+        handleVerified()
+    }, [])
     return (
         <div>
             <p>Verify Your Account</p>
