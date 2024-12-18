@@ -10,7 +10,7 @@ import { setSignIn } from "@/lib/redux/features/userSlice";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import Footer2 from "@/components/Footer2";
-
+import { callAPI } from "@/config/axios";
 
 interface ISignInPageProps {}
 
@@ -21,6 +21,16 @@ const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
 
   // const dispatch = useAppDispatch();
 
+  const onSignIn = async () => {
+  //   try {
+  //     const response = await callAPI.post(`/user/sign-in`, { email, password });
+  //     console.log("CHECK SIGNIN RESPONSE :", response.data);
+  //     dispatch(setSignIn({ ...response.data, isAuth: true }));
+  //     localStorage.setItem("tkn", response.data.message);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  };
   return (
     <div>
       <div>
@@ -60,7 +70,7 @@ const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
               <Button
                 type="submit"
                 className="bg-customLightBlue text-white rounded-full shadow"
-                onClick={signIn}
+                onClick={onSignIn}
               >
                 Login Sekarang
               </Button>

@@ -19,7 +19,7 @@ interface FormValue {
   username: string;
   email: string;
   password: string;
-  role: "customer" | "organizer";
+  role: "CUSTOMER" | "ORGANIZER";
 }
 
 const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
@@ -82,16 +82,16 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                     username: "",
                     email: "",
                     password: "",
-                    role: "customer",
+                    role: "CUSTOMER",
                   }}
-                  onSubmit={(values, { resetForm }) => {
+                  onSubmit={(values: FormValue, { resetForm }) => {
                     console.log("Values from input formik :", values);
                     onSignUp(values);
                     resetForm();
                   }}
                 >
-                  {(props: FormikProps<ISignUpValue>) => {
-                    const { values, handleChange, errors } = props;
+                  {(props: FormikProps<FormValue>) => {
+                    const { values, handleChange, errors, touched } = props;
                     console.log("error formik", errors);
 
                     return (
@@ -136,8 +136,8 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                               onChange={handleChange}
                               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-customMediumBlue focus:border-black sm:text-sm"
                             >
-                              <option value="customer">Customer</option>
-                              <option value="organizer">Organizer</option>
+                              <option value="CUSTOMER">Customer</option>
+                              <option value="ORGANIZER">Organizer</option>
                             </select>
                           </div>
                           <div className="flex justify-center items-center gap-4 p-5">
@@ -160,7 +160,6 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
       </div>
       <Footer2 />
     </div>
-
   );
 };
 
