@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { error } from "console";
 import { callAPI } from "@/config/axios";
-import Footer2 from "@/components/Footer2";
 import { SignUpSchema } from "./SignUpSchema";
 
 interface ISignUpPageProps {}
@@ -154,7 +153,6 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
           </div>
         </div>
       </div>
-      <Footer2 />
     </div>
   );
 };
