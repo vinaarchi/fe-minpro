@@ -24,6 +24,7 @@ interface FormValue {
 
 const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
   const onSignUp = async (values: FormValue) => {
+    console.log("Values being sent", values)
     try {
       const res = await callAPI.post("/user/sign-up", {
         fullname: values.fullname,
