@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import Navbar from "@/components/Navbar";
+
 import { Ticket, Plus, X } from "lucide-react";
 import Footer from "@/components/Footer";
-import Footer2 from "@/components/Footer2";
 
 const CreateEvent: React.FC = () => {
   const [showCategoryPopup, setShowCategoryPopup] = useState(false);
@@ -14,7 +13,6 @@ const CreateEvent: React.FC = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="pt-10 flex justify-center items-center min-h-screen bg-gray-100">
         <div className="w-3/4 space-y-6">
           {/*card1*/}
@@ -438,7 +436,6 @@ const CreateEvent: React.FC = () => {
         </div>
       </div>
       <Footer />
-      <Footer2 />
     </div>
   );
 };

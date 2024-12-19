@@ -1,16 +1,13 @@
 import React from "react";
-import Navbar from "@/components/Navbar";
+
 import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa";
 import Footer from "@/components/Footer";
-import Footer2 from "@/components/Footer2";
 
 const breadcrumbData = { breadcrumbs: ["Home", "Tentang Kami"] };
 export default function AboutUs() {
   return (
     <div>
-      <Navbar />
-
       <header
         className="h-[70vh] bg-black/50 bg-blend-overlay bg-cover bg-center"
         style={{ backgroundImage: "url('/images/tentang.jpg')" }}
@@ -82,7 +79,6 @@ export default function AboutUs() {
         </p>
       </div>
       <Footer />
-      <Footer2 />
     </div>
   );
 }

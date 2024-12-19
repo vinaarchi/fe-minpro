@@ -9,9 +9,8 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import Navbar from "@/components/Navbar";
+
 import Footer from "@/components/Footer";
-import Footer2 from "@/components/Footer2";
 
 const eventData = {
   breadcrumbs: [
@@ -98,7 +97,6 @@ const EventDetailPage = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="container p-4 mx-auto">
         <div className="mb-4 gap-4 grid grid-cols-2">
           <div className="space-y-4">
@@ -225,7 +223,6 @@ const EventDetailPage = () => {
         </div>
       </div>
       <Footer />
-      <Footer2 />
     </div>
   );
 };
