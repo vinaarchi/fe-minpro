@@ -41,7 +41,6 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   React.useEffect(() => {
     keepLogin();
   }, []);
-
   return (
     <>
       <nav className="flex justify-between items-center bg-customLightBlue px-4 sm:px-6 py-3 top-0 z-50 w-full text-sm">
@@ -50,7 +49,7 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
           <FaBars className="w-6 h-6" />
         </button>
         <div className="sm:hidden text-white font-ibrand text-lg">
-          <h2>Eventra</h2>
+          <Link href="/">Eventra</Link>
         </div>
         <div className="hidden sm:flex sm:ml-auto space-x-4">
           <Link href="/about" className="text-white hover:underline">
@@ -137,7 +136,6 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
             <Link href="/contact-us" className="text-white hover:underline">
               Hubungi kami
             </Link>
-            
           </div>
         )}
       </nav>
