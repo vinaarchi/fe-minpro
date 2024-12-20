@@ -3,12 +3,10 @@
 import Image from "next/image";
 import FormInput from "@/components/FormInput";
 import { Formik, Form, FormikProps } from "formik";
-import { ISignUpValue } from "./type";
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { error } from "console";
 import { callAPI } from "@/config/axios";
 import { SignUpSchema } from "./SignUpSchema";
 
@@ -18,7 +16,6 @@ interface FormValue {
   username: string;
   email: string;
   password: string;
-  role: "CUSTOMER" | "ORGANIZER";
 }
 
 const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
@@ -29,8 +26,7 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
         fullname: values.fullname,
         username: values.username,
         email: values.email,
-        password: values.password,
-        role: values.role,
+        password: values.password
       });
       alert(res.data.message);
     } catch (error) {
@@ -76,8 +72,7 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                     fullname: "",
                     username: "",
                     email: "",
-                    password: "",
-                    role: "CUSTOMER",
+                    password: ""
                   }}
                   onSubmit={(values: FormValue, { resetForm }) => {
                     console.log("Values from input formik :", values);
@@ -120,21 +115,7 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                             onChange={handleChange}
                             value={values.password}
                           />
-                          <div className="mt-4">
-                            <label htmlFor="role" className="font-bold">
-                              Role
-                            </label>
-                            <select
-                              name="role"
-                              id="role"
-                              value={values.role}
-                              onChange={handleChange}
-                              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-customMediumBlue focus:border-black sm:text-sm"
-                            >
-                              <option value="CUSTOMER">Customer</option>
-                              <option value="ORGANIZER">Organizer</option>
-                            </select>
-                          </div>
+                          
                           <div className="flex justify-center items-center gap-4 p-5">
                             <Button
                               type="submit"

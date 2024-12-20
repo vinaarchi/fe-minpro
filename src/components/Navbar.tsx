@@ -41,7 +41,6 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   React.useEffect(() => {
     keepLogin();
   }, []);
-
   return (
     <>
       <nav className="flex justify-between items-center bg-customLightBlue px-4 sm:px-6 py-3 top-0 z-50 w-full text-sm">
