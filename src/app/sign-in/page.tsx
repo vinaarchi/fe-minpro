@@ -26,6 +26,8 @@ const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
       console.log("CHECK SIGNIN RESPONSE :", response.data);
       dispatch(setSignIn({ ...response.data, isAuth: true }));
       localStorage.setItem("tkn", response.data.message);
+
+      router.replace("/");
     } catch (error) {
       console.log(error);
     }
