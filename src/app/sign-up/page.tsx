@@ -73,6 +73,7 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                     username: "",
                     email: "",
                     password: "",
+
                   }}
                   onSubmit={(values: FormValue, { resetForm }) => {
                     console.log("Values from input formik :", values);
