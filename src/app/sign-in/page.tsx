@@ -25,7 +25,7 @@ const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
       const response = await callAPI.post(`/user/sign-in`, { email, password });
       console.log("CHECK SIGNIN RESPONSE :", response.data);
       dispatch(setSignIn({ ...response.data, isAuth: true }));
-      localStorage.setItem("tkn", response.data.message);
+      localStorage.setItem("tkn", response.data.token);
 
       router.replace("/");
     } catch (error) {
