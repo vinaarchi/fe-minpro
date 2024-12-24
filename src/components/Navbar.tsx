@@ -8,26 +8,53 @@ import { LanguageContext } from "@/context/LanguageContext";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { callAPI } from "@/config/axios";
 import { setSignIn } from "@/lib/redux/features/userSlice";
+import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+  DropdownMenuArrow,
+} from "@radix-ui/react-dropdown-menu";
 interface INavbarProps {}
 
 const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.userReducer);
 
+  const dispatch = useAppDispatch();
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  //ini buat logout nya
+  const handleLogout = () => {
+    localStorage.removeItem("tkn");
+    dispatch(setSignIn({ isAuth: false }));
+    router.push("/");
+  };
+
+  // ini buat cek status user login dan akan mengarahkan
+  const handleExploreClick = () => {
+    if (!user.isAuth) {
+      router.push("/sign-in");
+    } else {
+      router.push("/");
+    }
   };
 
   const keepLogin = async () => {
     try {
       const token = localStorage.getItem("tkn");
+      console.log("ini const token", token)
       if (token) {
         const response = await callAPI.get(`/user/keep-login`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log("CHECK SIGN IN RESPONSE :", response.data);
+        console.log("CHECK NAVBAR KEEPLOGIN SIGN IN RESPONSE :", response.data);
         dispatch(setSignIn({ ...response.data, isAuth: true }));
         localStorage.setItem("tkn", response.data.token);
       } else {
@@ -39,6 +66,8 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   };
 
   React.useEffect(() => {
+    console.log("isAuth:", user); 
+    console.log("role:", user.role); 
     keepLogin();
   }, []);
   return (
@@ -86,24 +115,73 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
         </div>
 
         <div className="hidden sm:flex items-center space-x-4">
-          <Link
-            href="/create-event"
-            className="text-white flex items-center space-x-2 hover:underline"
-          >
-            <FaCalendarAlt className="w-5 h-5 text-white" />
-            <span>Buat Event</span>
-          </Link>
-          <Link
-            href="/explore"
-            className="text-white flex items-center space-x-2 hover:underline"
-          >
-            <FaCompass className="w-5 h-5 text-white" />
-            <span>Jelajah</span>
-          </Link>
+          {/* ini menu berdasarkan rolenya nnti */}
+          {user.isAuth && user.role === "ORGANIZER" && (
+            <>
+              <Link
+                href="/create-event"
+                className="text-white flex items-center space-x-2 hover:underline"
+              >
+                <FaCalendarAlt className="w-5 h-5 text-white" />
+                <span>Buat Event</span>
+              </Link>
+              <button
+                onClick={handleExploreClick}
+                className="text-white flex items-center space-x-2 hover:underline"
+              >
+                <FaCompass className="w-5 h-5 text-white" />
+                <span>Jelajah</span>
+              </button>
+            </>
+          )}
+
+          {user.isAuth && user.role === "CUSTOMER" && (
+            <>
+              <Link
+                href="/create-event"
+                className="text-white flex items-center space-x-2 hover:underline"
+              >
+                <FaCalendarAlt className="w-5 h-5 text-white" />
+                <span>Tiket Saya</span>
+              </Link>
+              <button
+                onClick={handleExploreClick}
+                className="text-white flex items-center space-x-2 hover:underline"
+              >
+                <FaCompass className="w-5 h-5 text-white" />
+                <span>Jelajah</span>
+              </button>
+            </>
+          )}
+
           <ul>
             <li className="flex gap-2">
               {user.email ? (
-                <p className="text-white font-ibrand">{user.email}</p>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button className="hover:bg-customLightBlue bg-customDarkBlue">
+                      <span>{user.email}</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="absolute-[100%] text-white bg-customDarkBlue rounded-md text-center">
+                    <DropdownMenuArrow />
+                    <DropdownMenuItem className="p-2 rounded-md text-xs">
+                      <Link href="/my-account">Akun Saya</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="p-2 rounded-md text-xs">
+                      <Link href="/explore-event">Jelajah</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="p-2 rounded-md text-xs">
+                      <Link href="/tickets">Tiket Saya</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="p-2 rounded-md text-xs">
+                      <Link href="/account-settings">Pengaturan</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="p-2 rounded-md text-xs font-bold text-customOrange">
+                      <button onClick={handleLogout}>Keluar</button>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 <>
                   <button className="bg-[#2d3250] text-white px-4 py-2 rounded-md border-[1px] border-white">

@@ -16,17 +16,21 @@ interface FormValue {
   username: string;
   email: string;
   password: string;
+  role: string;
+  referralCode: string;
 }
 
 const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
   const onSignUp = async (values: FormValue) => {
-    console.log("Values being sent", values)
+    console.log("Values being sent", values);
     try {
       const res = await callAPI.post("/user/sign-up", {
         fullname: values.fullname,
         username: values.username,
         email: values.email,
-        password: values.password
+        password: values.password,
+        role: values.role,
+        referralCode: values.referralCode,
       });
       alert(res.data.message);
     } catch (error) {
@@ -73,7 +77,8 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                     username: "",
                     email: "",
                     password: "",
-
+                    role: "customer",
+                    referralCode: "",
                   }}
                   onSubmit={(values: FormValue, { resetForm }) => {
                     console.log("Values from input formik :", values);
@@ -116,7 +121,42 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                             onChange={handleChange}
                             value={values.password}
                           />
-                          
+                          <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700">
+                              Role
+                            </label>
+                            <div className="flex space-x-4 mt-2">
+                              <label className="inline-flex items-center">
+                                <input
+                                  type="radio"
+                                  name="role"
+                                  value="CUSTOMER"
+                                  checked={values.role === "CUSTOMER"}
+                                  onChange={handleChange}
+                                  className="form-radio"
+                                />
+                                <span className="ml-2">Customer</span>
+                              </label>
+                              <label className="inline-flex items-center">
+                                <input
+                                  type="radio"
+                                  name="role"
+                                  value="ORGANIZER"
+                                  checked={values.role === "ORGANIZER"}
+                                  onChange={handleChange}
+                                  className="form-radio"
+                                />
+                                <span className="ml-2">Organizer</span>
+                              </label>
+                            </div>
+                          </div>
+                          <FormInput
+                            name="referralCode"
+                            type="text"
+                            label="Referral Code (Optional)"
+                            onChange={handleChange}
+                            value={values.referralCode}
+                          />
                           <div className="flex justify-center items-center gap-4 p-5">
                             <Button
                               type="submit"

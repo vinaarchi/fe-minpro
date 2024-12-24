@@ -32,9 +32,10 @@ const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
       console.log(error);
     }
   };
+
   return (
     <div>
-      <div>
+      <div> 
         <div className="flex justify-center m-24">
           <Card className="w-[450px] p-12">
             <h1 className="font-ibrand text-4xl text-customDarkBlue text-center">

@@ -7,6 +7,7 @@ interface IUser {
   email: string;
   isAuth?: boolean;
   imgprofile?: string;
+  role?: string;
 }
 
 const initialData: IUser = {
@@ -14,6 +15,9 @@ const initialData: IUser = {
   fullname: "",
   username: "",
   email: "",
+  isAuth: false,
+  imgprofile: "",
+  role: "",
 };
 
 const userSlice = createSlice({
