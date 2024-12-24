@@ -50,6 +50,7 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
     try {
       const token = localStorage.getItem("tkn");
       console.log("ini const token", token)
+      
       if (token) {
         const response = await callAPI.get(`/user/keep-login`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -68,6 +69,7 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   React.useEffect(() => {
     console.log("isAuth:", user); 
     console.log("role:", user.role); 
+
     keepLogin();
   }, []);
   return (
@@ -165,18 +167,46 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="absolute-[100%] text-white bg-customDarkBlue rounded-md text-center">
                     <DropdownMenuArrow />
-                    <DropdownMenuItem className="p-2 rounded-md text-xs">
-                      <Link href="/my-account">Akun Saya</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="p-2 rounded-md text-xs">
-                      <Link href="/explore-event">Jelajah</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="p-2 rounded-md text-xs">
-                      <Link href="/tickets">Tiket Saya</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="p-2 rounded-md text-xs">
-                      <Link href="/account-settings">Pengaturan</Link>
-                    </DropdownMenuItem>
+
+                    {user.isAuth && user.role === "ORGANIZER" && (
+                      <>
+                        <DropdownMenuItem className="p-2 rounded-md text-xs">
+                          <Link href="/dashboard">Dashboard</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="p-2 rounded-md text-xs">
+                          <Link href="/my-events">Event Saya</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="p-2 rounded-md text-xs">
+                          <Link href="/account-settings">Pengaturan</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="p-2 rounded-md text-xs">
+                          <Link href="/bank-accounts">Rekening</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="p-2 rounded-md text-xs">
+                          <Link href="/basic-information">Informasi Dasar</Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
+
+                    {/* ini buat role customer dropdown */}
+
+                    {user.isAuth && user.role === "CUSTOMER" && (
+                      <>
+                        <DropdownMenuItem className="p-2 rounded-md text-xs">
+                          <Link href="/explore-events">Jelajah</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="p-2 rounded-md text-xs">
+                          <Link href="/my-tickets">Tiket Saya</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="p-2 rounded-md text-xs">
+                          <Link href="/account-settings">Pengaturan</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="p-2 rounded-md text-xs">
+                          <Link href="/basic-information">Informasi Dasar</Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
+
                     <DropdownMenuItem className="p-2 rounded-md text-xs font-bold text-customOrange">
                       <button onClick={handleLogout}>Keluar</button>
                     </DropdownMenuItem>
