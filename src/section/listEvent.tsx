@@ -9,7 +9,7 @@ import CardText from "react-bootstrap/esm/CardText";
 
 const EventList = () => {
   return (
-    <div className="m-16">
+    <div className="m-12">
       <div>
         <h1 className="font-ibrand text-5xl">Event Pilihan</h1>
       </div>
