@@ -88,7 +88,7 @@ const EventsPage = () => {
           <div
             key={event.event_id}
             className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-            onClick={() => router.push(`/event/${event.event_id}`)} // Navigate to event details
+            onClick={() => router.push(`/event/${event.event_id}`)}
           >
             <div className="relative h-48">
               <Image
