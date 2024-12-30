@@ -184,6 +184,24 @@ export default function EventDetailPage() {
     }
   };
 
+  // const handleEditTicket = (ticketId: number) => {
+  //   router.push(`/edit-ticket/${ticketId}?eventId=${event?.event_id}`);
+  // };
+
+  // const handleDeleteTicket = async (ticketId: number) => {
+  //   if (!confirm("Are you sure you want to delete this ticket?")) return;
+
+  //   try {
+  //     await axios.delete(`http://localhost:3232/tickets/${ticketId}`);
+  //     setAllTickets((tickets) =>
+  //       tickets.filter((t) => t.ticket_id !== ticketId)
+  //     );
+  //     setSelectedTicket(null);
+  //   } catch (err) {
+  //     console.error("Failed to delete ticket:", err);
+  //   }
+  // };
+
   const handleBuyTicket = () => {
     if (selectedTicket) {
       console.log("Buying ticket:", selectedTicket);
@@ -222,9 +240,6 @@ export default function EventDetailPage() {
             <p>
               <strong>Nama Tiket:</strong> {newTicket.ticketName || "N/A"}
             </p>
-            {/* <p>
-              <strong>Tipe:</strong> {newTicket.type || "N/A"}
-            </p> */}
             <p>
               <strong>Harga:</strong>{" "}
               {newTicket.type === "free"
@@ -234,7 +249,6 @@ export default function EventDetailPage() {
             <p>
               <strong>Tiket Tersedia:</strong> {newTicket.available || "N/A"}
             </p>
-
             <p>
               <strong>Nama Narahubung:</strong> {newTicket.contactName}
             </p>
@@ -249,7 +263,6 @@ export default function EventDetailPage() {
       )}
 
       <div className="grid grid-cols-2 gap-8 mb-8">
-        {/*kiri atas*/}
         <div className="bg-gray-100 rounded-lg flex items-center justify-center h-96">
           {event.image ? (
             <img
@@ -259,14 +272,13 @@ export default function EventDetailPage() {
             />
           ) : (
             <img
-              src="/api/placeholder/800/600"
+              src="/images/event-list-default.svg"
               alt="gambar event"
               className="w-full h-full object-cover rounded-lg"
             />
           )}
         </div>
 
-        {/*kanan atas*/}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-customMediumBlue">
@@ -306,7 +318,6 @@ export default function EventDetailPage() {
       </div>
 
       <div className="grid grid-cols-2 gap-8">
-        {/*kiri bawah*/}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex gap-4 mb-6">
             <button
@@ -345,12 +356,11 @@ export default function EventDetailPage() {
                 </button>
               </div>
 
-              <div className="space-y-4" key="tickets-container">
-                {allTickets.map((ticket: TicketData) => (
+              <div className="space-y-4">
+                {allTickets.map((ticket) => (
                   <div
-                    key={`ticket-${ticket.ticket_id || ticket.ticket_id}`}
-                    onClick={() => setSelectedTicket(ticket)}
-                    className="p-4 rounded-md cursor-pointer transition-all border border-gray-200 hover:border-gray-300"
+                    key={`ticket-${ticket.ticket_id}`}
+                    className="p-4 rounded-md border border-gray-200 hover:border-gray-300"
                     style={{
                       borderColor:
                         selectedTicket?.ticket_id === ticket.ticket_id
@@ -366,8 +376,62 @@ export default function EventDetailPage() {
                           : "",
                     }}
                   >
-                    <h3 className="font-semibold">{ticket.ticketName}</h3>
-                    <p className="text-gray-600">{formatToIDR(ticket.price)}</p>
+                    <div className="flex justify-between items-start">
+                      <div
+                        className="flex-grow cursor-pointer"
+                        onClick={() => setSelectedTicket(ticket)}
+                      >
+                        <h3 className="font-semibold">{ticket.ticketName}</h3>
+                        <p className="text-gray-600">
+                          {formatToIDR(ticket.price)}
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(
+                              `/edit-ticket/${ticket.ticket_id}?eventId=${event.event_id}`
+                            );
+                          }}
+                          className="p-2 text-customLightBlue hover:text-customMediumBlue"
+                        >
+                          <FaEdit />
+                        </button>
+                        <button
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            if (
+                              window.confirm(
+                                "Apakah Anda yakin ingin menghapus tiket ini?"
+                              )
+                            ) {
+                              try {
+                                await axios.delete(
+                                  `http://localhost:3232/tickets/${ticket.ticket_id}`
+                                );
+                                setAllTickets((tickets) =>
+                                  tickets.filter(
+                                    (t) => t.ticket_id !== ticket.ticket_id
+                                  )
+                                );
+                                if (
+                                  selectedTicket?.ticket_id === ticket.ticket_id
+                                ) {
+                                  setSelectedTicket(null);
+                                }
+                              } catch (err) {
+                                console.error("Failed to delete ticket:", err);
+                                alert("Gagal menghapus tiket");
+                              }
+                            }
+                          }}
+                          className="p-2 text-red-500 hover:text-red-700"
+                        >
+                          <FaTimes />
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -375,7 +439,6 @@ export default function EventDetailPage() {
           )}
         </div>
 
-        {/*kanan bawah*/}
         <div className="bg-white p-6 rounded-lg shadow-md">
           {selectedTicket ? (
             <div>
@@ -397,7 +460,6 @@ export default function EventDetailPage() {
                     Berlaku hingga:{" "}
                     {new Date(selectedTicket.expiredDate).toLocaleString()}
                   </p>
-
                   <p>
                     <strong>Nama Narahubung:</strong>{" "}
                     {selectedTicket.contactName}

@@ -52,78 +52,38 @@ function EventCreationPage() {
 
   const handleSubmit = async () => {
     try {
-      console.log("Starting event creation...");
-
-      const eventCategoryResponse = await axios.post(
-        "http://localhost:3232/event-categories",
-        {
-          topic: selectedTopic,
-          format: selectedFormat,
-        }
-      );
-
-      console.log("Category Response:", eventCategoryResponse.data);
-      const eventCategoryId = eventCategoryResponse.data.id;
-
       const eventPayload = {
         name: eventName,
         description: eventDescription,
         location: eventLocation,
         date: eventDate,
         time: `${eventTime}:00`,
-        heldBy: heldBy,
+        heldBy,
         organiserId: 1,
-        categoryId: eventCategoryId,
+        category: {
+          topic: selectedTopic,
+          format: selectedFormat,
+        },
       };
-
-      console.log("Event Payload:", eventPayload);
 
       const eventResponse = await axios.post(
         "http://localhost:3232/events",
         eventPayload
       );
 
-      console.log(
-        "Full Event Response:",
-        JSON.stringify(eventResponse, null, 2)
-      );
-
-      if (!eventResponse || !eventResponse.data) {
-        throw new Error("No response data received from server");
+      if (eventResponse.data?.event_id) {
+        router.push(`/event/${eventResponse.data.event_id}`);
       }
-
-      if (
-        typeof eventResponse.data === "object" &&
-        eventResponse.data !== null
-      ) {
-        const responseData = eventResponse.data;
-        const eventId = responseData.event_id;
-
-        console.log("Event ID from response:", eventId);
-
-        if (!eventId) {
-          throw new Error("Could not find event ID in server response");
-        }
-
-        router.push(`/event/${eventId}`);
-      }
-    } catch (error: unknown) {
+    } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("Axios error:", {
-          message: error.message,
-          response: error.response?.data,
-          status: error.response?.status,
-        });
-        alert(`Error creating event: ${error.message}`);
+        console.error("API Error:", error.response?.data);
+        alert(error.response?.data?.error || "Failed to create event");
       } else {
-        const errorMessage =
-          error instanceof Error ? error.message : "An unknown error occurred";
-        console.error("Non-axios error:", errorMessage);
-        alert(`Error creating event: ${errorMessage}`);
+        console.error("Error:", error);
+        alert("Failed to create event");
       }
     }
   };
-
   return (
     <div className="h-screen bg-white p-6">
       <div className="h-full max-w-5xl mx-auto relative">
