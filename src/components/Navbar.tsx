@@ -10,7 +10,6 @@ import { callAPI } from "@/config/axios";
 import { setSignIn } from "@/lib/redux/features/userSlice";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +23,8 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const user = useAppSelector((state) => state.userReducer);
+
+  const [searchQuery, setSearchQuery] = useState("");
 
   const dispatch = useAppDispatch();
   const toggleMobileMenu = () => {
@@ -45,12 +46,23 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
       router.push("/");
     }
   };
+  //search
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
 
   const keepLogin = async () => {
     try {
       const token = localStorage.getItem("tkn");
-      console.log("ini const token", token)
-      
+      console.log("ini const token", token);
+
       if (token) {
         const response = await callAPI.get(`/user/keep-login`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -67,8 +79,8 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   };
 
   React.useEffect(() => {
-    console.log("isAuth:", user); 
-    console.log("role:", user.role); 
+    console.log("isAuth:", user);
+    console.log("role:", user.role);
 
     keepLogin();
   }, []);
@@ -102,18 +114,23 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
         <div className="hidden sm:block text-white font-ibrand text-4xl">
           Eventra
         </div>
-
+        {/* search */}
         <div className="flex-1 flex justify-center mt-4 sm:mt-0 sm:relative sm:top-0 relative top-[-15px]">
-          <div className="relative w-full max-w-md">
+          <form onSubmit={handleSearch} className="relative w-full max-w-md">
             <input
               type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
               placeholder="Cari event seru di sini"
               className="w-full px-4 py-2 rounded-l-md bg-[#060b40] text-white focus:outline-none"
             />
-            <button className="absolute right-0 top-0 bottom-0 px-4 py-2 rounded-r-md bg-blue-500 text-white hover:bg-blue-600">
+            <button
+              type="submit"
+              className="absolute right-0 top-0 bottom-0 px-4 py-2 rounded-r-md bg-blue-500 text-white hover:bg-blue-600"
+            >
               <FaSearch className="w-5 h-5 text-white" />
             </button>
-          </div>
+          </form>
         </div>
 
         <div className="hidden sm:flex items-center space-x-4">
