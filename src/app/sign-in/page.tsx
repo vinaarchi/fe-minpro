@@ -35,7 +35,21 @@ const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
 
   return (
     <div>
-      <div> 
+      <div className="flex justify-center items-center"> 
+      <div className="flex flex-col items-center p-5">
+            <Image
+              src="/images/sign-in.png"
+              alt="Logo"
+              width={500}
+              height={100}
+            />
+            <h3 className="font-ibrand text-4xl text-customMediumBlue">
+              Selamat Datang Kembali!
+            </h3>
+            <p>
+              Login sekarang dan nikmati fitur menarik yang sudah menunggumu!
+            </p>
+          </div>
         <div className="flex justify-center m-24">
           <Card className="w-[450px] p-12">
             <h1 className="font-ibrand text-4xl text-customDarkBlue text-center">
@@ -81,21 +95,6 @@ const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
               </a>
             </div>
           </Card>
-          <div className="flex flex-col items-center p-5">
-            <Image
-              src="/images/signin.png"
-              alt="Logo"
-              width={500}
-              height={100}
-            />
-            <h3 className="font-ibrand text-4xl text-customMediumBlue">
-              Selamat Datang Kembali!
-            </h3>
-            <p>
-              Login sekarang dan nikmati fitur menarik yang sudah menunggumu!
-            </p>
-          </div>
-          ;
         </div>
       </div>
     </div>

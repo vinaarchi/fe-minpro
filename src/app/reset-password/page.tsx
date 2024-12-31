@@ -43,14 +43,6 @@ const ResetPassword: React.FunctionComponent = () => {
   };
   return (
     <div className="px-24 py-14 bg-white h- flex items-center justify-center">
-      <div>
-        <Image
-          src="/images/reset.png"
-          alt="logo reset"
-          width={500}
-          height={100}
-        />
-      </div>
       <div className="w-1/2 h-fit rounded-2xl px-10 py-8 bg-customLightBlue">
         <h1 className="text-3xl font-ibrand text-white">Reset Password</h1>
         <div className="py-6 space-y-5">
@@ -83,9 +75,17 @@ const ResetPassword: React.FunctionComponent = () => {
             className="bg-customDarkBlue text-white px-4 py-2 rounded-full shadow"
             onClick={onResetPassword}
           >
-            Reset Password
+            Reset Now
           </Button>
         </div>
+      </div>
+      <div>
+        <Image
+          src="/images/reset-pass.png"
+          alt="logo reset"
+          width={500}
+          height={100}
+        />
       </div>
     </div>
   );

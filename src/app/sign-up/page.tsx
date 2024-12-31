@@ -42,22 +42,6 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
     <div>
       <div className="m-8 p-10">
         <div className="flex justify-center m-5">
-          <div className="flex flex-col items-center p-5">
-            <Image
-              src="/images/signup.png"
-              alt="Logo"
-              width={500}
-              height={100}
-              className=""
-            />
-            <h3 className="font-ibrand text-4xl">
-              Tidak lagi ketinggalan event favoritmu
-            </h3>
-            <p>
-              Gabung sekarang dan rasakan kemudahan bertransaksi dan mengelola
-              event di Eventra
-            </p>
-          </div>
           <div className="space-y-5">
             <Card className="w-[500px] p-12">
               <h1 className="font-ibrand text-3xl text-customDarkBlue text-center">
@@ -121,8 +105,8 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                             onChange={handleChange}
                             value={values.password}
                           />
-                          <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700">
+                          <div className="mb-4 mt-4">
+                            <label className="block text-black font-semibold">
                               Role
                             </label>
                             <div className="flex space-x-4 mt-2">
@@ -172,6 +156,21 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                 </Formik>
               </CardContent>
             </Card>
+          </div>
+          <div className="flex flex-col justify-center items-center p-5">
+            <Image
+              src="/images/sign-up.png"
+              alt="Logo"
+              width={500}
+              height={100}
+            />
+            <h3 className="font-ibrand text-4xl">
+              Tidak lagi ketinggalan event favoritmu
+            </h3>
+            <p>
+              Gabung sekarang dan rasakan kemudahan bertransaksi dan mengelola
+              event di Eventra
+            </p>
           </div>
         </div>
       </div>
