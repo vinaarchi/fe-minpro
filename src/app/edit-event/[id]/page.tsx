@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
+import { Image as ImageIcon } from "lucide-react";
+import Image from "next/image";
 
 interface EventData {
   event_id: number;
@@ -37,6 +39,9 @@ export default function EditEventPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -55,6 +60,10 @@ export default function EditEventPage() {
           date: formattedDate,
           time: formattedTime,
         });
+
+        if (eventData.image) {
+          setImagePreview(eventData.image);
+        }
       } catch (err) {
         console.error("Failed to fetch event details:", err);
         setError("Failed to load event details. Please try again.");
@@ -67,6 +76,28 @@ export default function EditEventPage() {
       fetchEventDetails();
     }
   }, [id]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        alert("Please select an image file");
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert("Image must be smaller than 5MB");
+        return;
+      }
+
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -83,28 +114,52 @@ export default function EditEventPage() {
     setError(null);
     setSuccessMessage(null);
 
-    const formattedDate = formData.date;
-
-    const formattedTime = `${formData.time}:00`;
-
-    const updateData = {
-      name: formData.name,
-      description: formData.description,
-      location: formData.location,
-      date: formattedDate,
-      time: formattedTime,
-      heldBy: formData.heldBy,
-      organiserId: formData.organiserId,
-      category_id: formData.category_id,
-    };
-
     try {
-      console.log("Sending update data:", updateData);
+      let imageUrl = formData.image;
+
+      if (image && imagePreview) {
+        try {
+          const uploadResponse = await axios.post(
+            "http://localhost:3232/events/upload",
+            { image: imagePreview },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (!uploadResponse.data?.url) {
+            throw new Error("No URL in upload response");
+          }
+
+          imageUrl = uploadResponse.data.url;
+        } catch (uploadError) {
+          console.error("Image upload error:", uploadError);
+          setError("Failed to upload image");
+          return;
+        }
+      }
+
+      const formattedDate = formData.date;
+      const formattedTime = `${formData.time}:00`;
+
+      const updateData = {
+        name: formData.name,
+        description: formData.description,
+        location: formData.location,
+        date: formattedDate,
+        time: formattedTime,
+        heldBy: formData.heldBy,
+        organiserId: formData.organiserId,
+        category_id: formData.category_id,
+        image: imageUrl,
+      };
+
       const response = await axios.patch(
         `http://localhost:3232/events/${id}`,
         updateData
       );
-      console.log("Update response:", response.data);
 
       setSuccessMessage("Event updated successfully!");
 
@@ -117,6 +172,8 @@ export default function EditEventPage() {
         err.response?.data?.message ||
           "Failed to update event. Please try again."
       );
+    } finally {
+      setIsUploading(false);
     }
   };
   if (loading) {
@@ -238,12 +295,64 @@ export default function EditEventPage() {
           />
         </div>
 
+        <div className="space-y-2">
+          <label className="block mb-2 font-medium">Event Image</label>
+          <div className="flex items-center gap-4">
+            <div className="relative h-40 w-40 bg-gray-100 rounded-md overflow-hidden">
+              {imagePreview || formData.image ? (
+                <Image
+                  src={imagePreview || formData.image || ""}
+                  alt="Event preview"
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full text-gray-400">
+                  <ImageIcon size={24} />
+                </div>
+              )}
+            </div>
+            <div className="space-y-2">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+                id="event-image"
+              />
+              <label
+                htmlFor="event-image"
+                className="block px-4 py-2 bg-customLightBlue text-white rounded-md hover:bg-customMediumBlue transition-colors cursor-pointer text-center"
+              >
+                {formData.image ? "Change Image" : "Upload Image"}
+              </label>
+              {(imagePreview || formData.image) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setImage(null);
+                    setImagePreview(null);
+                    setFormData((prev) => ({ ...prev, image: null }));
+                  }}
+                  className="block w-full px-4 py-2 border border-red-500 text-red-500 rounded-md hover:bg-red-50 transition-colors"
+                >
+                  Remove Image
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
         <div className="flex gap-4">
           <button
             type="submit"
-            className="px-6 py-2 bg-customMediumBlue text-white rounded-md hover:bg-customDarkBlue transition-colors"
+            disabled={isUploading}
+            className={`px-6 py-2 ${
+              isUploading
+                ? "bg-gray-400"
+                : "bg-customMediumBlue hover:bg-customDarkBlue"
+            } text-white rounded-md transition-colors`}
           >
-            Perbarui Event
+            {isUploading ? "Updating..." : "Perbarui Event"}
           </button>
 
           <button
