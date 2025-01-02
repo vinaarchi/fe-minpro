@@ -74,6 +74,8 @@ export default function EventDetailPage() {
         const response = await axios.get(`http://localhost:3232/events/${id}`);
         console.log("Event response data:", response.data);
 
+        console.log("Image URL:", response.data.image);
+
         if (!response.data) {
           throw new Error("No event data received");
         }
@@ -89,7 +91,6 @@ export default function EventDetailPage() {
 
     fetchEventDetails();
   }, [id]);
-
   useEffect(() => {
     const fetchTickets = async () => {
       try {

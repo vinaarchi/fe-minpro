@@ -12,6 +12,7 @@ import {
   Tag,
   Palette,
 } from "lucide-react";
+import { Image as ImageIcon } from "lucide-react";
 
 function EventCreationPage() {
   const router = useRouter();
@@ -26,6 +27,8 @@ function EventCreationPage() {
   const [topics, setTopics] = useState<string[]>([]);
   const [heldBy, setHeldBy] = useState("");
   const [formats, setFormats] = useState<string[]>([]);
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
   // const [createdEventId, setCreatedEventId] = useState<number | null>(null);
 
   useEffect(() => {
@@ -50,8 +53,56 @@ function EventCreationPage() {
     fetchTopicsAndFormats();
   }, []);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        alert("Please select an image file");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert("Image must be smaller than 5MB");
+        return;
+      }
+
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async () => {
     try {
+      let imageUrl = "";
+
+      if (image && imagePreview) {
+        try {
+          console.log("Uploading image...");
+          const uploadResponse = await axios.post(
+            "http://localhost:3232/events/upload",
+            { image: imagePreview },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (!uploadResponse.data?.url) {
+            throw new Error("No URL in upload response");
+          }
+
+          imageUrl = uploadResponse.data.url;
+          console.log("Image uploaded successfully:", imageUrl);
+        } catch (uploadError) {
+          console.error("Image upload error:", uploadError);
+          throw new Error("Failed to upload image");
+        }
+      }
+
       const eventPayload = {
         name: eventName,
         description: eventDescription,
@@ -59,13 +110,15 @@ function EventCreationPage() {
         date: eventDate,
         time: `${eventTime}:00`,
         heldBy,
-        organiserId: 1,
+        organiserId: 2,
+        image: imageUrl,
         category: {
           topic: selectedTopic,
           format: selectedFormat,
         },
       };
 
+      console.log("Creating event with payload:", eventPayload);
       const eventResponse = await axios.post(
         "http://localhost:3232/events",
         eventPayload
@@ -75,12 +128,13 @@ function EventCreationPage() {
         router.push(`/event/${eventResponse.data.event_id}`);
       }
     } catch (error) {
+      console.error("Full error:", error);
       if (axios.isAxiosError(error)) {
-        console.error("API Error:", error.response?.data);
         alert(error.response?.data?.error || "Failed to create event");
       } else {
-        console.error("Error:", error);
-        alert("Failed to create event");
+        alert(
+          error instanceof Error ? error.message : "Failed to create event"
+        );
       }
     }
   };
@@ -141,7 +195,38 @@ function EventCreationPage() {
                     placeholder="Deskripsikan event Anda"
                   />
                 </div>
+                <div>
+                  <label className="flex items-center text-sm font-medium text-customDarkBlue mb-1.5">
+                    <ImageIcon className="w-4 h-4 mr-2" />
+                    Event Photo
+                  </label>
+                  <div className="mt-1 flex items-center space-x-4">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                      id="event-image"
+                    />
+                    <label
+                      htmlFor="event-image"
+                      className="cursor-pointer px-4 py-2 border border-customLightBlue/20 rounded-md hover:bg-gray-50"
+                    >
+                      Choose Image
+                    </label>
 
+                    {imagePreview && (
+                      <div className="relative w-20 h-20">
+                        <Image
+                          src={imagePreview}
+                          alt="Event preview"
+                          fill
+                          className="object-cover rounded-md"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="flex items-center text-sm font-medium text-customDarkBlue mb-1.5">

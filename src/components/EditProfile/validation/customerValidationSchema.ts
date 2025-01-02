@@ -1,8 +1,10 @@
 import * as Yup from "yup";
 
 export const customerValidationSchema = Yup.object({
+
   fullname: Yup.string().required("Nama Lengkap diperlukan"),
   username: Yup.string().required("Nama Panggilan diperlukan"),
+
   email: Yup.string().email("Email Tidak Valid").required("Email diperlukan"),
   phone: Yup.string()
     .matches(/^\d{10}$/, "Nomor ponsel tidak valid")

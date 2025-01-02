@@ -15,6 +15,7 @@ import { setUpdateProfile } from "@/lib/redux/features/userSlice";
 import { parse } from "path";
 
 interface IFormValues {
+
   fullname: string;
   username: string;
   email: string;
@@ -41,6 +42,7 @@ const CustomerEditProfile = () => {
     const storedUserId = localStorage.getItem("userId");
     if (storedUserId) {
       setUserId(parseInt(storedUserId, 10));
+
       //ambil data user dari localstorage
       const fetchUserProfile = async () => {
         try {
@@ -71,6 +73,7 @@ const CustomerEditProfile = () => {
 
   const onUpdateProfile = async (values: IFormValues) => {
     console.log("Sending update request with data", values);
+
     try {
       if (userId) {
         const response = await callAPI.patch(`/user/update/${userId}`, values);
@@ -81,7 +84,9 @@ const CustomerEditProfile = () => {
 
         //nyimpen kembali data yang ke update ke localstorage
         localStorage.setItem("userId", response.data.id);
+
         alert("Akun berhasil diupdate");
+
         router.push("/member/informasi-dasar");
       }
     } catch (error) {
@@ -102,7 +107,9 @@ const CustomerEditProfile = () => {
               initialValues={initialValues}
               validationSchema={validationSchema}
               onSubmit={(values) => {
+
                 console.log("Form submitted", values);
+
                 onUpdateProfile(values);
               }}
             >
@@ -110,7 +117,9 @@ const CustomerEditProfile = () => {
                 <Form className="space-y-5">
                   <div>
                     <label htmlFor="fullname" className="text-2xl">
+
                       Fullname
+
                     </label>
                     <Field
                       id="fullname"
@@ -121,6 +130,7 @@ const CustomerEditProfile = () => {
                     />
                   </div>
                   <div>
+
                     <label htmlFor="username" className="text-2xl">
                       Username
                     </label>
@@ -172,6 +182,7 @@ const CustomerEditProfile = () => {
                         Lainnya
                       </label>
                     </div>
+
                     <div>
                       <label htmlFor="profilePicture" className="text-2xl">
                         Profile Picture
@@ -189,6 +200,7 @@ const CustomerEditProfile = () => {
                         className="w-full border-2 rounded-md p-2"
                       />
                     </div>
+
                   </div>
                   <div className="flex justify-center">
                     <Button
