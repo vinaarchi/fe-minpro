@@ -92,7 +92,7 @@ const EventsPage = () => {
           >
             <div className="relative h-48">
               <Image
-                src={event.image || "/images/default-event.jpg"}
+                src={event.image || "/images/event-list-default.svg"}
                 alt={event.name}
                 fill
                 className="object-cover"
