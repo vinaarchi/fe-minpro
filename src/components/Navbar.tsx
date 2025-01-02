@@ -61,7 +61,6 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   const keepLogin = async () => {
     try {
       const token = localStorage.getItem("tkn");
-      console.log("ini const token", token);
 
       if (token) {
         const response = await callAPI.get(`/user/keep-login`, {
@@ -79,9 +78,6 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   };
 
   React.useEffect(() => {
-    console.log("isAuth:", user);
-    console.log("role:", user.role);
-
     keepLogin();
   }, []);
   return (

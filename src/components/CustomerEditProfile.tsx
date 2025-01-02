@@ -15,41 +15,65 @@ import { setUpdateProfile } from "@/lib/redux/features/userSlice";
 import { parse } from "path";
 
 interface IFormValues {
-  fullName: string;
-  userName: string;
+
+  fullname: string;
+  username: string;
   email: string;
   phone: string;
   gender: string;
-  profilePicture: File | null;
+  imgProfile: File | null;
 }
 
 const CustomerEditProfile = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  console.log("CHECK DISPATCH REDUX", dispatch);
 
   const [userId, setUserId] = useState<number>(0);
+  const [initialValues, setInitialValues] = useState<IFormValues>({
+    fullname: "",
+    username: "",
+    email: "",
+    phone: "",
+    gender: "",
+    imgProfile: null,
+  });
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     if (storedUserId) {
       setUserId(parseInt(storedUserId, 10));
-    }
-  }, []);
 
-  const initialValues: IFormValues = {
-    fullName: "",
-    userName: "",
-    email: "",
-    phone: "",
-    gender: "",
-    profilePicture: null,
-  };
+      //ambil data user dari localstorage
+      const fetchUserProfile = async () => {
+        try {
+          const response = await callAPI.get(`/user/data-user/${storedUserId}`);
+          const userData = response.data;
+
+          //set initial values
+          setInitialValues({
+            fullname: userData.fullname || "",
+            username: userData.username || "",
+            email: userData.email || "",
+            phone: userData.phone || "",
+            gender: userData.gender || "",
+            imgProfile: userData.imgProfile || null,
+          });
+
+          console.log("Data user", userData);
+        } catch (error) {
+          console.log("Error fetching user profile", error);
+        }
+      };
+      fetchUserProfile();
+    }
+    console.log("Stored user id", storedUserId);
+  }, []);
 
   const validationSchema = customerValidationSchema;
 
   const onUpdateProfile = async (values: IFormValues) => {
-    console.log("Updating profile", values);
+    console.log("Sending update request with data", values);
+
     try {
       if (userId) {
         const response = await callAPI.patch(`/user/update/${userId}`, values);
@@ -60,6 +84,9 @@ const CustomerEditProfile = () => {
 
         //nyimpen kembali data yang ke update ke localstorage
         localStorage.setItem("userId", response.data.id);
+
+        alert("Akun berhasil diupdate");
+
         router.push("/member/informasi-dasar");
       }
     } catch (error) {
@@ -80,6 +107,9 @@ const CustomerEditProfile = () => {
               initialValues={initialValues}
               validationSchema={validationSchema}
               onSubmit={(values) => {
+
+                console.log("Form submitted", values);
+
                 onUpdateProfile(values);
               }}
             >
@@ -87,7 +117,9 @@ const CustomerEditProfile = () => {
                 <Form className="space-y-5">
                   <div>
                     <label htmlFor="fullname" className="text-2xl">
-                      Nama Lengkap
+
+                      Fullname
+
                     </label>
                     <Field
                       id="fullname"
@@ -98,12 +130,13 @@ const CustomerEditProfile = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="userName" className="text-2xl">
-                      Nama Panggilan
+
+                    <label htmlFor="username" className="text-2xl">
+                      Username
                     </label>
                     <Field
-                      id="userName"
-                      name="userName"
+                      id="username"
+                      name="username"
                       type="text"
                       placeholder="Nama Panggilan Kamu"
                       className="w-full border-2 rounded-md p-2"
@@ -149,6 +182,25 @@ const CustomerEditProfile = () => {
                         Lainnya
                       </label>
                     </div>
+
+                    <div>
+                      <label htmlFor="profilePicture" className="text-2xl">
+                        Profile Picture
+                      </label>
+                      <input
+                        id="imgProfile"
+                        name="imgProfile"
+                        type="file"
+                        onChange={(event: any) => {
+                          setFieldValue(
+                            "imgProfile",
+                            event.currentTarget.files[0]
+                          );
+                        }}
+                        className="w-full border-2 rounded-md p-2"
+                      />
+                    </div>
+
                   </div>
                   <div className="flex justify-center">
                     <Button
