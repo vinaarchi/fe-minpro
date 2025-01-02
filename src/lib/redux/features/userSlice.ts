@@ -32,8 +32,8 @@ const userSlice = createSlice({
     setSignOut: () => {
       return { ...initialData };
     },
-    setUpdateProfile: (initialState, action) => {
-      return { ...initialState, ...action.payload };
+    setUpdateProfile: (state, action) => {
+      return { ...state, ...action.payload };
     },
   },
 });

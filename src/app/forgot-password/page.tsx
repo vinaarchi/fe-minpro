@@ -24,6 +24,14 @@ const ForgotPassword: React.FunctionComponent = () => {
   };
   return (
     <div className="px-24 py-14 bg-white flex flex-row items-center justify-center">
+      <div>
+        <Image
+          src="/images/forgot-password.png"
+          alt="logo forget"
+          width={500}
+          height={100}
+        />
+      </div>
       <div className="w-1/2 h-fit rounded-2xl px-10 oy-8 bg-customLightBlue shadow-md">
         <h1 className="text-2xl font-ibrand text-white pt-5">
           Forgot Password
@@ -47,14 +55,7 @@ const ForgotPassword: React.FunctionComponent = () => {
           </Button>
         </div>
       </div>
-      <div>
-        <Image
-          src="/images/forget.png"
-          alt="logo forget"
-          width={500}
-          height={100}
-        />
-      </div>
+      
     </div>
   );
 };

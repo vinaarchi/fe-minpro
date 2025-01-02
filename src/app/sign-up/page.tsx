@@ -16,6 +16,8 @@ interface FormValue {
   username: string;
   email: string;
   password: string;
+  phone: string;
+  gender: string;
   role: string;
   referralCode: string;
 }
@@ -29,6 +31,8 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
         username: values.username,
         email: values.email,
         password: values.password,
+        phone: values.phone,
+        gender: values.gender,
         role: values.role,
         referralCode: values.referralCode,
       });
@@ -42,22 +46,6 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
     <div>
       <div className="m-8 p-10">
         <div className="flex justify-center m-5">
-          <div className="flex flex-col items-center p-5">
-            <Image
-              src="/images/signup.png"
-              alt="Logo"
-              width={500}
-              height={100}
-              className=""
-            />
-            <h3 className="font-ibrand text-4xl">
-              Tidak lagi ketinggalan event favoritmu
-            </h3>
-            <p>
-              Gabung sekarang dan rasakan kemudahan bertransaksi dan mengelola
-              event di Eventra
-            </p>
-          </div>
           <div className="space-y-5">
             <Card className="w-[500px] p-12">
               <h1 className="font-ibrand text-3xl text-customDarkBlue text-center">
@@ -77,7 +65,9 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                     username: "",
                     email: "",
                     password: "",
-                    role: "customer",
+                    phone: "",
+                    gender: "",
+                    role: "CUSTOMER",
                     referralCode: "",
                   }}
                   onSubmit={(values: FormValue, { resetForm }) => {
@@ -121,8 +111,56 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                             onChange={handleChange}
                             value={values.password}
                           />
-                          <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700">
+                          <FormInput
+                            name="phone"
+                            type="text"
+                            label="Phone Number"
+                            onChange={handleChange}
+                            value={values.phone}
+                          />
+
+                          <div className="mb-4 mt-4">
+                            <label className="block text-black font-semibold">
+                              Gender
+                            </label>
+                            <div className="flex space-x-4 mt-2">
+                              <label className="inline-flex items-center">
+                                <input
+                                  type="radio"
+                                  name="gender"
+                                  value="male"
+                                  checked={values.gender === "male"}
+                                  onChange={handleChange}
+                                  className="form-radio"
+                                />
+                                <span className="ml-2">Male</span>
+                              </label>
+                              <label className="inline-flex items-center">
+                                <input
+                                  type="radio"
+                                  name="gender"
+                                  value="female"
+                                  checked={values.gender === "female"}
+                                  onChange={handleChange}
+                                  className="form-radio"
+                                />
+                                <span className="ml-2">Female</span>
+                              </label>
+                              <label className="inline-flex items-center">
+                                <input
+                                  type="radio"
+                                  name="gender"
+                                  value="other"
+                                  checked={values.gender === "other"}
+                                  onChange={handleChange}
+                                  className="form-radio"
+                                />
+                                <span className="ml-2">Other</span>
+                              </label>
+                            </div>
+                          </div>
+                          <div className="mb-4 mt-4">
+                            <label className="block text-black font-semibold">
                               Role
                             </label>
                             <div className="flex space-x-4 mt-2">
@@ -172,6 +210,21 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                 </Formik>
               </CardContent>
             </Card>
+          </div>
+          <div className="flex flex-col justify-center items-center p-5">
+            <Image
+              src="/images/sign-up.png"
+              alt="Logo"
+              width={500}
+              height={100}
+            />
+            <h3 className="font-ibrand text-4xl">
+              Tidak lagi ketinggalan event favoritmu
+            </h3>
+            <p>
+              Gabung sekarang dan rasakan kemudahan bertransaksi dan mengelola
+              event di Eventra
+            </p>
           </div>
         </div>
       </div>

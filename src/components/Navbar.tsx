@@ -112,7 +112,7 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
 
       <nav className="flex flex-col sm:flex-row items-center bg-customMediumBlue px-4 sm:px-6 py-6 w-full text-lg">
         <div className="hidden sm:block text-white font-ibrand text-4xl">
-          Eventra
+          <Link href="/">Eventra</Link>
         </div>
         {/* search */}
         <div className="flex-1 flex justify-center mt-4 sm:mt-0 sm:relative sm:top-0 relative top-[-15px]">
@@ -133,7 +133,7 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
           </form>
         </div>
 
-        <div className="hidden sm:flex items-center space-x-4">
+        <div className="hidden sm:flex items-center space-x-4 z-10">
           {/* ini menu berdasarkan rolenya nnti */}
           {user.isAuth && user.role === "ORGANIZER" && (
             <>
@@ -157,7 +157,7 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
           {user.isAuth && user.role === "CUSTOMER" && (
             <>
               <Link
-                href="/create-event"
+                href="/member/tiket-saya"
                 className="text-white flex items-center space-x-2 hover:underline"
               >
                 <FaCalendarAlt className="w-5 h-5 text-white" />
@@ -194,13 +194,15 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
                           <Link href="/my-events">Event Saya</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/account-settings">Pengaturan</Link>
+                          <Link href="/member/informasi-dasar">Pengaturan</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/bank-accounts">Rekening</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/basic-information">Informasi Dasar</Link>
+                          <Link href="/member/informasi-dasar">
+                            Informasi Dasar
+                          </Link>
                         </DropdownMenuItem>
                       </>
                     )}
@@ -213,13 +215,15 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
                           <Link href="/explore-events">Jelajah</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/my-tickets">Tiket Saya</Link>
+                          <Link href="/member/tiket-saya">Tiket Saya</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/account-settings">Pengaturan</Link>
+                          <Link href="/member/pengaturan">Pengaturan</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/basic-information">Informasi Dasar</Link>
+                          <Link href="/member/informasi-dasar">
+                            Informasi Dasar
+                          </Link>
                         </DropdownMenuItem>
                       </>
                     )}
