@@ -16,6 +16,8 @@ interface FormValue {
   username: string;
   email: string;
   password: string;
+  phone: string;
+  gender: string;
   role: string;
   referralCode: string;
 }
@@ -29,6 +31,8 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
         username: values.username,
         email: values.email,
         password: values.password,
+        phone: values.phone,
+        gender: values.gender,
         role: values.role,
         referralCode: values.referralCode,
       });
@@ -61,7 +65,9 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                     username: "",
                     email: "",
                     password: "",
-                    role: "customer",
+                    phone: "",
+                    gender: "",
+                    role: "CUSTOMER",
                     referralCode: "",
                   }}
                   onSubmit={(values: FormValue, { resetForm }) => {
@@ -105,6 +111,54 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                             onChange={handleChange}
                             value={values.password}
                           />
+                          <FormInput
+                            name="phone"
+                            type="text"
+                            label="Phone Number"
+                            onChange={handleChange}
+                            value={values.phone}
+                          />
+
+                          <div className="mb-4 mt-4">
+                            <label className="block text-black font-semibold">
+                              Gender
+                            </label>
+                            <div className="flex space-x-4 mt-2">
+                              <label className="inline-flex items-center">
+                                <input
+                                  type="radio"
+                                  name="gender"
+                                  value="male"
+                                  checked={values.gender === "male"}
+                                  onChange={handleChange}
+                                  className="form-radio"
+                                />
+                                <span className="ml-2">Male</span>
+                              </label>
+                              <label className="inline-flex items-center">
+                                <input
+                                  type="radio"
+                                  name="gender"
+                                  value="female"
+                                  checked={values.gender === "female"}
+                                  onChange={handleChange}
+                                  className="form-radio"
+                                />
+                                <span className="ml-2">Female</span>
+                              </label>
+                              <label className="inline-flex items-center">
+                                <input
+                                  type="radio"
+                                  name="gender"
+                                  value="other"
+                                  checked={values.gender === "other"}
+                                  onChange={handleChange}
+                                  className="form-radio"
+                                />
+                                <span className="ml-2">Other</span>
+                              </label>
+                            </div>
+                          </div>
                           <div className="mb-4 mt-4">
                             <label className="block text-black font-semibold">
                               Role

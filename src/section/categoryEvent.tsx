@@ -1,127 +1,122 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import * as React from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+type Category = {
+  displayName: string;
+  dbTopic: string;
+  image: string;
+};
+
+const CATEGORIES: Category[] = [
+  {
+    displayName: "Art & Design",
+    dbTopic: "Desain, Foto, Video",
+    image: "/images/category/art.jpg",
+  },
+  {
+    displayName: "Culinary",
+    dbTopic: "Makanan, Minuman",
+    image: "/images/category/culinary.jpg",
+  },
+  {
+    displayName: "Education",
+    dbTopic: "Pendidikan, Beasiswa",
+    image: "/images/category/edu.jpg",
+  },
+  {
+    displayName: "Fashion",
+    dbTopic: "Fashion, Kecantikan",
+    image: "/images/category/fashion.jpg",
+  },
+  {
+    displayName: "Music",
+    dbTopic: "Musik",
+    image: "/images/category/music.jpg",
+  },
+  {
+    displayName: "Sport",
+    dbTopic: "Olahraga",
+    image: "/images/category/sport.jpg",
+  },
+  {
+    displayName: "Tech",
+    dbTopic: "Tech, Start-Up",
+    image: "/images/category/tech.jpg",
+  },
+  {
+    displayName: "Travel",
+    dbTopic: "Wisata & Liburan",
+    image: "/images/category/travel.jpg",
+  },
+];
 
 const CategoryEvent = () => {
+  const router = useRouter();
+  const [availableTopics, setAvailableTopics] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3232/event-categories/topics"
+        );
+        const topics = await response.json();
+        setAvailableTopics(topics);
+      } catch (error) {
+        console.error("Failed to fetch topics:", error);
+      }
+    };
+
+    fetchTopics();
+  }, []);
+
+  const handleCategoryClick = (dbTopic: string) => {
+    router.push(`/events?topic=${encodeURIComponent(dbTopic)}`);
+  };
+
   return (
     <div>
       <div className="bg-customLightBlue p-10">
-        <h1 className="text-4xl font-ibrand text-white">Kategori Event</h1>
-        <div className="justify-center grid grid-cols-2 md:grid-cols-6 ">
-          <div className="relative w-48 pt-5">
-            <Image
-              src="/images/category/art.jpg"
-              alt="Top Events 1"
-              width={500}
-              height={250}
-              objectFit="cover"
-              className="rounded-lg"
-            />
-            <p className="text-center font-ibrand p-2 text-2xl text-white">
-              Art
-            </p>
-          </div>
-          <div className="relative w-48 pt-5">
-            <Image
-              src="/images/category/culinary.jpg"
-              alt="Top Events 1"
-              width={500}
-              height={250}
-              objectFit="cover"
-              className="rounded-lg"
-            />
-            <p className="text-center font-ibrand p-2 text-2xl text-white">
-              Culinary
-            </p>
-          </div>
-          <div className="relative w-48 pt-5">
-            <Image
-              src="/images/category/edu.jpg"
-              alt="Top Events 1"
-              width={500}
-              height={250}
-              objectFit="cover"
-              className="rounded-lg"
-            />
-            <p className="text-center font-ibrand p-2 text-2xl text-white">
-              Education
-            </p>
-          </div>
-          <div className="relative w-48 pt-5">
-            <Image
-              src="/images/category/fashion.jpg"
-              alt="Top Events 1"
-              width={500}
-              height={250}
-              objectFit="cover"
-              className="rounded-lg"
-            />
-            <p className="text-center font-ibrand p-2 text-2xl text-white">
-              fashion
-            </p>
-          </div>
-          <div className="relative w-48 pt-5">
-            <Image
-              src="/images/category/music.jpg"
-              alt="Top Events 1"
-              width={500}
-              height={250}
-              objectFit="cover"
-              className="rounded-lg"
-            />
-            <p className="text-center font-ibrand p-2 text-2xl text-white">
-              Sport
-            </p>
-          </div>
-          <div className="relative w-48 pt-5">
-            <Image
-              src="/images/category/sport.jpg"
-              alt="Top Events 1"
-              width={500}
-              height={250}
-              objectFit="cover"
-              className="rounded-lg"
-            />
-            <p className="text-center font-ibrand p-2 text-2xl text-white">
-              Tech
-            </p>
-          </div>
-          <div className="relative w-48 pt-5">
-            <Image
-              src="/images/category/tech.jpg"
-              alt="Top Events 1"
-              width={500}
-              height={250}
-              objectFit="cover"
-              className="rounded-lg"
-            />
-            <p className="text-center font-ibrand p-2 text-2xl text-white">
-              Tech
-            </p>
-          </div>
-          <div className="relative w-48 pt-5">
-            <Image
-              src="/images/category/travel.jpg"
-              alt="Top Events 1"
-              width={500}
-              height={250}
-              objectFit="cover"
-              className="rounded-lg"
-            />
-            <p className="text-center font-ibrand p-2 text-2xl text-white">
-              Travel
-            </p>
-          </div>
+        <h1 className="text-4xl font-ibrand text-white mb-8">Kategori Event</h1>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 justify-items-center">
+          {CATEGORIES.map((category, idx) => (
+            <div
+              key={idx}
+              onClick={() => handleCategoryClick(category.dbTopic)}
+              className="group relative w-48 cursor-pointer"
+            >
+              <div className="overflow-hidden rounded-lg">
+                <Image
+                  src={category.image}
+                  alt={category.displayName}
+                  width={500}
+                  height={250}
+                  className="rounded-lg transition-transform duration-300 group-hover:scale-110"
+                  priority={idx < 4}
+                />
+              </div>
+
+              <div className="absolute inset-0 bg-black bg-opacity-30 rounded-lg transition-opacity duration-300 group-hover:bg-opacity-50" />
+
+              <p className="absolute bottom-4 left-0 right-0 text-center font-ibrand text-2xl text-white">
+                {category.displayName}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
+
       <div className="bg-white p-8">
-        <Link href="/event-detail">
-          <p className="text-center hover:text-customOrange text-4xl font-ibrand">
-            Jelajahi event lainnya
-          </p>
-        </Link>
+        <button
+          onClick={() => router.push("/events")}
+          className="w-full text-center text-4xl font-ibrand transition-colors duration-300 hover:text-customOrange focus:outline-none"
+        >
+          Jelajahi event lainnya
+        </button>
       </div>
     </div>
   );

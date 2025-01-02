@@ -8,7 +8,7 @@ const CusSidebar = () => {
     <div
       style={{
         width: "300px",
-        height: "100%",
+        height: "100vh",
         backgroundColor: "#2d3250",
         paddingTop: "20px",
         paddingBottom: "100px"

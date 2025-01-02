@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
+import { set } from "lodash";
 
 const ResetPassword: React.FunctionComponent = () => {
   const [newPassword, setNewPassword] = useState<string>("");
@@ -34,11 +35,15 @@ const ResetPassword: React.FunctionComponent = () => {
           },
         }
       );
-      setMessage(response.data.message);
-      setTimeout(() => router.push("/sign-in"), 3000);
+      if (response) {
+        setMessage(response.data.message);
+        setTimeout(() => router.push("/sign-in"), 3000);
+      } else {
+        setMessage("Failed to reset password");
+      }
     } catch (error: any) {
       console.log(error);
-      setMessage(error.response.data.message);
+      setMessage(error.response.data.message || "An error occured");
     }
   };
   return (

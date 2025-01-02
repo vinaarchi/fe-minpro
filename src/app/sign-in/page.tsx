@@ -26,6 +26,7 @@ const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
       console.log("CHECK SIGNIN RESPONSE :", response.data);
       dispatch(setSignIn({ ...response.data, isAuth: true }));
       localStorage.setItem("tkn", response.data.token);
+      localStorage.setItem("userId", response.data.id);
 
       router.replace("/");
     } catch (error) {
@@ -35,21 +36,19 @@ const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
 
   return (
     <div>
-      <div className="flex justify-center items-center"> 
-      <div className="flex flex-col items-center p-5">
-            <Image
-              src="/images/sign-in.png"
-              alt="Logo"
-              width={500}
-              height={100}
-            />
-            <h3 className="font-ibrand text-4xl text-customMediumBlue">
-              Selamat Datang Kembali!
-            </h3>
-            <p>
-              Login sekarang dan nikmati fitur menarik yang sudah menunggumu!
-            </p>
-          </div>
+      <div className="flex justify-center items-center">
+        <div className="flex flex-col items-center p-5">
+          <Image
+            src="/images/sign-in.png"
+            alt="Logo"
+            width={500}
+            height={100}
+          />
+          <h3 className="font-ibrand text-4xl text-customMediumBlue">
+            Selamat Datang Kembali!
+          </h3>
+          <p>Login sekarang dan nikmati fitur menarik yang sudah menunggumu!</p>
+        </div>
         <div className="flex justify-center m-24">
           <Card className="w-[450px] p-12">
             <h1 className="font-ibrand text-4xl text-customDarkBlue text-center">
