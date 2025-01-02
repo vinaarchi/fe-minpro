@@ -3,7 +3,6 @@ export interface CustomerProfileFormValues {
   phone: string;
   fullName: string;
   username: string;
-  birthDate: string;
   gender: "male" | "female" | "other";
   profilePicture: File | null;
 }
