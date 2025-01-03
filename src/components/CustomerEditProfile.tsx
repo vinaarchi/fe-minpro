@@ -15,7 +15,6 @@ import { setUpdateProfile } from "@/lib/redux/features/userSlice";
 import { parse } from "path";
 
 interface IFormValues {
-
   fullname: string;
   username: string;
   email: string;
@@ -46,20 +45,23 @@ const CustomerEditProfile = () => {
       //ambil data user dari localstorage
       const fetchUserProfile = async () => {
         try {
-          const response = await callAPI.get(`/user/data-user/${storedUserId}`);
-          const userData = response.data;
+          const response = await callAPI.get(
+            `http://localhost:3232/user/data-user/${storedUserId}`
+          );
+          const userData = response.data.result;
 
           //set initial values
           setInitialValues({
-            fullname: userData.fullname || "",
-            username: userData.username || "",
-            email: userData.email || "",
-            phone: userData.phone || "",
-            gender: userData.gender || "",
-            imgProfile: userData.imgProfile || null,
+            fullname: userData.fullname,
+            username: userData.username,
+            email: userData.email,
+            phone: userData.phone,
+            gender: userData.gender,
+            imgProfile: userData.imgProfile,
           });
 
-          console.log("Data user", userData);
+          // console.log("INI USER DATANYA", userData);
+          console.log("INI INITIALVALUESNYA", initialValues);
         } catch (error) {
           console.log("Error fetching user profile", error);
         }
@@ -76,7 +78,10 @@ const CustomerEditProfile = () => {
 
     try {
       if (userId) {
-        const response = await callAPI.patch(`/user/update/${userId}`, values);
+        const response = await callAPI.patch(
+          `http://localhost:3232/user/update/${userId}`,
+          values
+        );
         console.log(" Akun berhasil diupdate", response.data);
 
         // update data user di reduxnya
@@ -107,7 +112,6 @@ const CustomerEditProfile = () => {
               initialValues={initialValues}
               validationSchema={validationSchema}
               onSubmit={(values) => {
-
                 console.log("Form submitted", values);
 
                 onUpdateProfile(values);
@@ -117,20 +121,24 @@ const CustomerEditProfile = () => {
                 <Form className="space-y-5">
                   <div>
                     <label htmlFor="fullname" className="text-2xl">
-
                       Fullname
-
                     </label>
                     <Field
                       id="fullname"
                       name="fullname"
                       type="text"
                       placeholder="Nama Lengkap Kamu"
+                      value={initialValues.fullname}
+                      // onChange={(e: any) => {
+                      //   setInitialValues({
+                      //     ...initialValues,
+                      //     fullname: e.target.value,
+                      //   });
+                      // }}
                       className="w-full border-2 rounded-md p-2"
                     />
                   </div>
                   <div>
-
                     <label htmlFor="username" className="text-2xl">
                       Username
                     </label>
@@ -200,7 +208,6 @@ const CustomerEditProfile = () => {
                         className="w-full border-2 rounded-md p-2"
                       />
                     </div>
-
                   </div>
                   <div className="flex justify-center">
                     <Button

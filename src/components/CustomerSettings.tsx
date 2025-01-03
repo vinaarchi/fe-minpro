@@ -7,21 +7,21 @@ import Image from "next/image";
 
 const CustomerSettings = () => {
   const handleDeleteUser = async () => {
-    
     try {
-        const userId = localStorage.getItem("userId");
-        console.log("User ID", userId);
+      const userId = localStorage.getItem("userId");
+      console.log("User ID", userId);
 
-        const response = await axios.delete(`http://localhost:3000/user/delete/${userId}`);
-        console.log("Delete user", response.data);
-        localStorage.removeItem("userId");
-        alert("Akun berhasil dihapus");
-        window.location.href = "/sign-in";
-      } catch (error) {
-        console.log("Error delete user", error);
-        alert("Gagal menghapus akun. Silahkan coba lagi");
-      }
-    
+      const response = await axios.delete(
+        `http://localhost:3232/user/delete/${userId}`
+      );
+      console.log("Delete user", response.data);
+      localStorage.removeItem("userId");
+      alert("Akun berhasil dihapus");
+      window.location.href = "/sign-in";
+    } catch (error) {
+      console.log("Error delete user", error);
+      alert("Gagal menghapus akun. Silahkan coba lagi");
+    }
   };
 
   return (

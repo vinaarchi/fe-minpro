@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import AuthGuard from "@/guard/AuthGuard";
 
-const CusSidebar = () => {
+const OrgSidebar = () => {
   return (
     <div
       style={{
@@ -15,13 +15,16 @@ const CusSidebar = () => {
         paddingBottom: "100px",
       }}
     >
-      <AuthGuard allowedRoles={["CUSTOMER"]}>
+      <AuthGuard allowedRoles={["ORGANIZER"]}>
         <ul className="text-white font-serif space-y-5 text-center text-xl pt-10">
           <li>
-            <Link href="/event-detail">Jelajah Event</Link>
+            <Link href="/member/dashboard">Dashboard</Link>
           </li>
           <li>
-            <Link href="/member/tiket-saya">Tiket Saya</Link>
+            <Link href="/member/event-list">Event Saya</Link>
+          </li>
+          <li>
+            <Link href="/member/rekening">Rekening</Link>
           </li>
           <li>
             <Link href="/member/informasi-dasar">Informasi Dasar</Link>
@@ -35,4 +38,4 @@ const CusSidebar = () => {
   );
 };
 
-export default CusSidebar;
+export default OrgSidebar;

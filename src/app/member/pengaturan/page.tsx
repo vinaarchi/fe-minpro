@@ -3,6 +3,7 @@
 import CustomerSettings from "@/components/CustomerSettings";
 import CusSidebar from "@/components/CustSidebar";
 import OrganizerSettings from "@/components/OrganizerSettings";
+import OrgSidebar from "@/components/OrgSideBar";
 import * as React from "react";
 
 const SettingProfilePage: React.FC = () => {
@@ -10,7 +11,7 @@ const SettingProfilePage: React.FC = () => {
 
   return (
     <div className="flex">
-      <CusSidebar />
+      {role === "CUSTOMER" ? <CusSidebar /> : <OrgSidebar />}
 
       <div>
         {role === "CUSTOMER" ? <CustomerSettings /> : <OrganizerSettings />}
