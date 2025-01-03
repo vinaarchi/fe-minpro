@@ -86,7 +86,7 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
                           <FormInput
                             name="fullname"
                             type="text"
-                            label="First name"
+                            label="Fullname"
                             onChange={handleChange}
                             value={values.fullname}
                           />

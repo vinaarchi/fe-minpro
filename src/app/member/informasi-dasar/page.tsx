@@ -3,6 +3,7 @@
 import CustomerEditProfile from "@/components/CustomerEditProfile";
 import CusSidebar from "@/components/CustSidebar";
 import OrganizerEditProfile from "@/components/OrganizerEditProfile";
+import OrgSidebar from "@/components/OrgSideBar";
 import * as React from "react";
 
 const EditProfilePage: React.FC = () => {
@@ -10,7 +11,7 @@ const EditProfilePage: React.FC = () => {
 
   return (
     <div className="flex">
-      <CusSidebar />
+      {role === "CUSTOMER" ? <CusSidebar /> : <OrgSidebar />}
 
       <div>
         {role === "CUSTOMER" ? (
