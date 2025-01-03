@@ -184,20 +184,20 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
                     {user.isAuth && user.role === "ORGANIZER" && (
                       <>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/dashboard">Dashboard</Link>
+                          <Link href="/member/dashboard">Dashboard</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/my-events">Event Saya</Link>
+                          <Link href="/member/event-list">Event Saya</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="p-2 rounded-md text-xs">
+                          <Link href="/member/rekening">Rekening</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/member/informasi-dasar">Pengaturan</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/bank-accounts">Rekening</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/member/informasi-dasar">
-                            Informasi Dasar
+                          <Link href="/member/pengaturan">
+                            Pengaturan
                           </Link>
                         </DropdownMenuItem>
                       </>
