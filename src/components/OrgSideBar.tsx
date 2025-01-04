@@ -24,13 +24,13 @@ const OrgSidebar = () => {
             <Link href="/member/event-list">Event Saya</Link>
           </li>
           <li>
-            <Link href="/member/rekening">Rekening</Link>
+            <Link href="/organizer/rekening">Rekening</Link>
           </li>
           <li>
-            <Link href="/member/informasi-dasar">Informasi Dasar</Link>
+            <Link href="/organizer/informasi-dasar">Informasi Dasar</Link>
           </li>
           <li>
-            <Link href="/member/pengaturan">Pengaturan</Link>
+            <Link href="/organizer/pengaturan">Pengaturan</Link>
           </li>
         </ul>
       </AuthGuard>

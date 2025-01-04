@@ -190,15 +190,15 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
                           <Link href="/member/event-list">Event Saya</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/member/rekening">Rekening</Link>
+                          <Link href="/organizer/rekening">Rekening</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/member/informasi-dasar">Pengaturan</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/member/pengaturan">
-                            Pengaturan
+                          <Link href="/organizer/informasi-dasar">
+                            Informasi Dasar
                           </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="p-2 rounded-md text-xs">
+                          <Link href="/organizer/pengaturan">Pengaturan</Link>
                         </DropdownMenuItem>
                       </>
                     )}
@@ -214,12 +214,12 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
                           <Link href="/member/tiket-saya">Tiket Saya</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/member/pengaturan">Pengaturan</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/member/informasi-dasar">
                             Informasi Dasar
                           </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="p-2 rounded-md text-xs">
+                          <Link href="/member/pengaturan">Pengaturan</Link>
                         </DropdownMenuItem>
                       </>
                     )}
