@@ -1,18 +1,17 @@
 "use client";
 
-
-import CusSidebar from "@/components/CustSidebar";
+import OrganizerSettings from "@/components/OrganizerSettings";
+import OrgSidebar from "@/components/OrgSideBar";
 import AuthGuard from "@/guard/AuthGuard";
 import * as React from "react";
 import Image from "next/image";
 import axios from "axios";
 
-const SettingProfilePage: React.FC = () => {
+const OrgSettingProfilePage: React.FC = () => {
   const handleDeleteUser = async () => {
     try {
       const userId = localStorage.getItem("userId");
       console.log("User ID", userId);
-
       const response = await axios.delete(
         `http://localhost:3232/user/delete/${userId}`
       );
@@ -27,8 +26,8 @@ const SettingProfilePage: React.FC = () => {
   };
   return (
     <div className="flex">
-      <AuthGuard allowedRoles={["CUSTOMER"]}>
-        <CusSidebar />
+      <AuthGuard allowedRoles={["ORGANIZER"]}>
+        <OrgSidebar />
         <div>
           <div className="flex justify-center items-center min-h-screen px-96">
                 <div className="flex flex-col items-center space-y-5 p-10 bg-white rounded-lg shadow-lg">
@@ -40,9 +39,9 @@ const SettingProfilePage: React.FC = () => {
                       height={200}
                     />
                   </div>
-                  <div className=" justify-center text-center">
-                    <h1 className="text-3xl">Customer Settings</h1>
-                    <p className="text-xl">Ini adalah halaman pengaturan customer</p>
+                  <div className="justify-center text-center">
+                    <h1>Organizer Settings</h1>
+                    <p>Ini adalah halaman pengaturan Organizer</p>
                   </div>
                   <div className="flex justify-center">
                     <button
@@ -55,9 +54,9 @@ const SettingProfilePage: React.FC = () => {
                 </div>
               </div>
         </div>
-        </AuthGuard>
+      </AuthGuard>
     </div>
   );
 };
 
-export default SettingProfilePage;
+export default OrgSettingProfilePage;
