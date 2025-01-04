@@ -18,6 +18,7 @@ interface Event {
   location: string;
   price?: number;
   image?: string;
+  createdAt: string;
   locationDetail?: {
     name: string;
   };
@@ -34,10 +35,11 @@ const EventList = () => {
   const fetchEvents = async () => {
     try {
       const response = await fetch(`http://localhost:3232/events?limit=4`);
+      if (!response.ok) throw new Error("Failed to fetch");
       const data = await response.json();
       setEvents(data.events);
-    } catch (error) {
-      console.error("Failed to fetch events:", error);
+    } catch (err) {
+      console.error("Failed to fetch events:", err);
     } finally {
       setIsLoading(false);
     }
@@ -47,26 +49,19 @@ const EventList = () => {
     fetchEvents();
   }, []);
 
-  const handleEventClick = (eventId: number) => {
-    router.push(`/event/${eventId}`);
-  };
-
-  if (isLoading) {
-    return <div className="m-12">Loading...</div>;
-  }
+  if (isLoading) return <div className="m-12">Loading...</div>;
 
   return (
     <div className="m-12">
       <div>
-        <h1 className="font-ibrand text-5xl">Event Pilihan</h1>
+        <h1 className="font-ibrand text-5xl">Event Terbaru</h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-6">
         {events.map((event) => (
           <Card
             key={event.event_id}
-            style={{ width: "20rem" }}
-            className="border rounded-md shadow-md hover:shadow-lg transition-shadow"
-            onClick={() => handleEventClick(event.event_id)}
+            className="border rounded-md shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+            onClick={() => router.push(`/event/${event.event_id}`)}
           >
             <Image
               src={event.image || "/images/event-list-default.svg"}
@@ -75,7 +70,7 @@ const EventList = () => {
               height={400}
               className="object-cover"
             />
-            <CardBody className="space-y-2 m-4">
+            <CardBody className="space-y-2 p-4">
               <CardTitle className="font-ibrand text-3xl line-clamp-2">
                 {event.name}
               </CardTitle>
@@ -86,12 +81,12 @@ const EventList = () => {
                   year: "numeric",
                 })}
               </CardText>
-              {event.price && (
+              {event.price !== undefined && (
                 <CardText className="font-bold">
                   Rp{event.price.toLocaleString("id-ID")}
                 </CardText>
               )}
-              <hr />
+              <hr className="my-2" />
               <CardTitle className="font-ibrand text-2xl line-clamp-1">
                 {event.locationDetail?.name || event.location}
               </CardTitle>

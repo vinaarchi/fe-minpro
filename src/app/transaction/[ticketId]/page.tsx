@@ -141,7 +141,7 @@ export default function TransactionPage() {
 
         <div className="grid grid-cols-2 gap-8">
           <div>
-            <h2 className="text-lg font-semibold mb-4">Payment Details</h2>
+            <h2 className="text-lg font-semibold mb-4">Detail Pembayaran</h2>
 
             <div className="space-y-4">
               {BankAccounts.map((account) => (
@@ -157,27 +157,29 @@ export default function TransactionPage() {
             </div>
 
             <div className="mt-6">
-              <label className="block mb-2">Promo Code</label>
+              <label className="block mb-2">Kode Promo</label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value)}
                   className="border rounded px-3 py-2 flex-grow"
-                  placeholder="Enter promo code"
+                  placeholder="Masukkan kode promo"
                 />
                 <button
                   onClick={checkPromoCode}
                   className="bg-blue-500 text-white px-4 py-2 rounded"
                 >
-                  Apply
+                  Gunakan
                 </button>
               </div>
             </div>
           </div>
 
           <div>
-            <h2 className="text-lg font-semibold mb-4">Upload Payment Proof</h2>
+            <h2 className="text-lg font-semibold mb-4">
+              Upload Bukti Pembayaran
+            </h2>
 
             <div className="border-2 border-dashed rounded-lg p-4 text-center">
               <input
@@ -191,13 +193,13 @@ export default function TransactionPage() {
                 {previewUrl ? (
                   <img
                     src={previewUrl}
-                    alt="Payment proof"
+                    alt="Bukti pembayaran"
                     className="max-w-full h-auto mx-auto"
                   />
                 ) : (
                   <div className="flex flex-col items-center">
                     <FaUpload className="text-3xl mb-2" />
-                    <p>Click to upload payment proof</p>
+                    <p>Klik untuk upload bukti pembayaran</p>
                   </div>
                 )}
               </label>
@@ -205,12 +207,12 @@ export default function TransactionPage() {
 
             <div className="mt-6 space-y-2">
               <div className="flex justify-between">
-                <span>Ticket Price</span>
+                <span>Harga Tiket</span>
                 <span>Rp {ticket.price.toLocaleString()}</span>
               </div>
               {discount > 0 && (
                 <div className="flex justify-between text-green-600">
-                  <span>Discount</span>
+                  <span>Diskon</span>
                   <span>- Rp {discount.toLocaleString()}</span>
                 </div>
               )}
@@ -224,7 +226,7 @@ export default function TransactionPage() {
               onClick={handleSubmit}
               className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
             >
-              Complete Payment
+              Selesaikan Pembayaran
             </button>
           </div>
         </div>
