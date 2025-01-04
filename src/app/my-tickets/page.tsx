@@ -65,14 +65,12 @@ export default function MyTickets() {
         <h2 className="text-2xl font-semibold text-gray-700 mb-2">
           No Tickets Found
         </h2>
-        <p className="text-gray-500 mb-4">
-          You haven't purchased any tickets yet.
-        </p>
+        <p className="text-gray-500 mb-4">Kamu belum membeli tiket apapun.</p>
         <Link
           href="/"
           className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
         >
-          Browse Events
+          Telusuri Events
         </Link>
       </div>
     );
@@ -80,7 +78,7 @@ export default function MyTickets() {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-8">My Tickets</h1>
+      <h1 className="text-3xl font-bold mb-8">Tiket Saya</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tickets.map((transaction) => (
@@ -90,7 +88,10 @@ export default function MyTickets() {
           >
             <div className="relative h-48">
               <img
-                src={transaction.ticket.event.image || "/default-event.jpg"}
+                src={
+                  transaction.ticket.event.image ||
+                  "/images/event-list-default.svg"
+                }
                 alt={transaction.ticket.event.name}
                 className="w-full h-full object-cover"
               />
@@ -133,7 +134,7 @@ export default function MyTickets() {
 
               <div className="mt-6 pt-4 border-t">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Paid Amount</span>
+                  <span className="text-gray-600">Jumlah</span>
                   <span className="text-lg font-semibold">
                     Rp {transaction.finalPrice.toLocaleString()}
                   </span>
