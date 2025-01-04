@@ -205,7 +205,7 @@ export default function EventDetailPage() {
 
   const handleBuyTicket = () => {
     if (selectedTicket) {
-      console.log("Buying ticket:", selectedTicket);
+      router.push(`/transaction/${selectedTicket.ticket_id}`);
     }
   };
 
