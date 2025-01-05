@@ -11,6 +11,8 @@ import {
   FaUsers,
   FaEdit,
   FaStar,
+  FaTrash,
+  FaSave,
 } from "react-icons/fa";
 
 interface Review {
@@ -80,6 +82,11 @@ export default function EventDetailPage() {
     comment: "",
   });
   const [hoveredStar, setHoveredStar] = useState(0);
+  const [editingReview, setEditingReview] = useState<number | null>(null);
+  const [editForm, setEditForm] = useState({
+    rating: 0,
+    comment: "",
+  });
 
   useEffect(() => {
     if (!id) {
@@ -263,6 +270,41 @@ export default function EventDetailPage() {
       console.error("Failed to submit review:", error);
     }
   };
+
+  const handleEditClick = (review: Review) => {
+    setEditingReview(review.id);
+    setEditForm({
+      rating: review.rating,
+      comment: review.comment,
+    });
+  };
+
+  const handleUpdateReview = async (reviewId: number) => {
+    try {
+      await axios.patch(`http://localhost:3232/reviews/${reviewId}`, editForm);
+
+      setReviews(
+        reviews.map((review) =>
+          review.id === reviewId ? { ...review, ...editForm } : review
+        )
+      );
+
+      setEditingReview(null);
+    } catch (error) {
+      console.error("Failed to update review:", error);
+    }
+  };
+
+  const handleDeleteReview = async (reviewId: number) => {
+    if (!window.confirm("Are you sure you want to delete this review?")) return;
+
+    try {
+      await axios.delete(`http://localhost:3232/reviews/${reviewId}`);
+      setReviews(reviews.filter((review) => review.id !== reviewId));
+    } catch (error) {
+      console.error("Failed to delete review:", error);
+    }
+  };
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto my-8 p-4">Loading event details...</div>
@@ -412,35 +454,6 @@ export default function EventDetailPage() {
               </div>
 
               <div className="space-y-4">
-                {/* {allTickets.map((ticket) => (
-                  <div
-                    key={`ticket-${ticket.ticket_id}`}
-                    className="p-4 rounded-md border border-gray-200 hover:border-gray-300"
-                    style={{
-                      borderColor:
-                        selectedTicket?.ticket_id === ticket.ticket_id
-                          ? "#424769"
-                          : "",
-                      borderWidth:
-                        selectedTicket?.ticket_id === ticket.ticket_id
-                          ? "2px"
-                          : "1px",
-                      backgroundColor:
-                        selectedTicket?.ticket_id === ticket.ticket_id
-                          ? "#f8f9fa"
-                          : "",
-                    }}
-                  >
-                    <div className="flex justify-between items-start">
-                      <div
-                        className="flex-grow cursor-pointer"
-                        onClick={() => setSelectedTicket(ticket)}
-                      >
-                        <h3 className="font-semibold">{ticket.ticketName}</h3>
-                        <p className="text-gray-600">
-                          {formatToIDR(ticket.price)}
-                        </p>
-                      </div> */}
                 {allTickets.map((ticket) => (
                   <div
                     key={`ticket-${ticket.ticket_id}`}
@@ -655,24 +668,94 @@ export default function EventDetailPage() {
                   </div>
                   <div>
                     <p className="font-semibold">{review.user.username}</p>
-                    <div className="flex gap-1">
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <FaStar
-                          key={index}
-                          className={
-                            index < review.rating
-                              ? "text-yellow-400"
-                              : "text-gray-300"
-                          }
-                        />
-                      ))}
-                    </div>
+                    {editingReview === review.id ? (
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            type="button"
+                            onClick={() =>
+                              setEditForm({ ...editForm, rating: star })
+                            }
+                            className="text-2xl"
+                          >
+                            <FaStar
+                              className={
+                                star <= editForm.rating
+                                  ? "text-yellow-400"
+                                  : "text-gray-300"
+                              }
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex gap-1">
+                        {Array.from({ length: 5 }).map((_, index) => (
+                          <FaStar
+                            key={index}
+                            className={
+                              index < review.rating
+                                ? "text-yellow-400"
+                                : "text-gray-300"
+                            }
+                          />
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <p className="text-sm text-gray-500 ml-auto">
-                    {new Date(review.createdAt).toLocaleDateString()}
-                  </p>
+                  {review.userId === 2 && ( //hardcoded userid 2
+                    <div className="ml-auto flex gap-2">
+                      {editingReview === review.id ? (
+                        <>
+                          <button
+                            onClick={() => handleUpdateReview(review.id)}
+                            className="p-1 text-customMediumBlue hover:text-customDarkBlue flex items-center gap-1"
+                            title="Save"
+                          >
+                            <FaSave />
+                          </button>
+                          <button
+                            onClick={() => setEditingReview(null)}
+                            className="p-1 text-gray-600 hover:text-gray-800 flex items-center gap-1"
+                            title="Cancel"
+                          >
+                            <FaTimes />
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => handleEditClick(review)}
+                            className="p-1 text-customMediumBlue hover:text-customDarkBlue"
+                            title="Edit review"
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteReview(review.id)}
+                            className="p-1 text-customOrange hover:text-red-800"
+                            title="Delete review"
+                          >
+                            <FaTrash />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  )}
                 </div>
-                <p className="text-gray-700">{review.comment}</p>
+                {editingReview === review.id ? (
+                  <textarea
+                    value={editForm.comment}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, comment: e.target.value })
+                    }
+                    className="w-full p-2 border rounded-md"
+                    rows={3}
+                  />
+                ) : (
+                  <p className="text-gray-700">{review.comment}</p>
+                )}
               </div>
             ))}
           </div>
