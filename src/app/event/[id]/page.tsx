@@ -10,7 +10,21 @@ import {
   FaTimes,
   FaUsers,
   FaEdit,
+  FaStar,
 } from "react-icons/fa";
+
+interface Review {
+  id: number;
+  eventId: number;
+  userId: number;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  user: {
+    username: string;
+    imgProfile: string | null;
+  };
+}
 
 interface EventDetail {
   event_id: number;
@@ -60,6 +74,12 @@ export default function EventDetailPage() {
     "description"
   );
   const [selectedTicket, setSelectedTicket] = useState<TicketData | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [newReview, setNewReview] = useState({
+    rating: 0,
+    comment: "",
+  });
+  const [hoveredStar, setHoveredStar] = useState(0);
 
   useEffect(() => {
     if (!id) {
@@ -166,6 +186,23 @@ export default function EventDetailPage() {
     fetchNewTicket();
   }, [newTicketId, id]);
 
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3232/events/${id}/reviews`
+        );
+        setReviews(response.data);
+      } catch (error) {
+        console.error("Failed to fetch reviews:", error);
+      }
+    };
+
+    if (id) {
+      fetchReviews();
+    }
+  }, [id]);
+
   const formatToIDR = (price: number | null) =>
     price
       ? new Intl.NumberFormat("id-ID", {
@@ -205,10 +242,27 @@ export default function EventDetailPage() {
 
   const handleBuyTicket = () => {
     if (selectedTicket) {
+      if (selectedTicket.available <= 0) {
+        alert("Tiket sudah habis terjual");
+        return;
+      }
       router.push(`/transaction/${selectedTicket.ticket_id}`);
     }
   };
 
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        `http://localhost:3232/events/${id}/reviews`,
+        newReview
+      );
+      setReviews([response.data, ...reviews]);
+      setNewReview({ rating: 0, comment: "" });
+    } catch (error) {
+      console.error("Failed to submit review:", error);
+    }
+  };
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto my-8 p-4">Loading event details...</div>
@@ -358,7 +412,7 @@ export default function EventDetailPage() {
               </div>
 
               <div className="space-y-4">
-                {allTickets.map((ticket) => (
+                {/* {allTickets.map((ticket) => (
                   <div
                     key={`ticket-${ticket.ticket_id}`}
                     className="p-4 rounded-md border border-gray-200 hover:border-gray-300"
@@ -385,6 +439,50 @@ export default function EventDetailPage() {
                         <h3 className="font-semibold">{ticket.ticketName}</h3>
                         <p className="text-gray-600">
                           {formatToIDR(ticket.price)}
+                        </p>
+                      </div> */}
+                {allTickets.map((ticket) => (
+                  <div
+                    key={`ticket-${ticket.ticket_id}`}
+                    className={`p-4 rounded-md border border-gray-200 hover:border-gray-300 ${
+                      ticket.available <= 0 ? "opacity-50" : ""
+                    }`}
+                    style={{
+                      borderColor:
+                        selectedTicket?.ticket_id === ticket.ticket_id
+                          ? "#424769"
+                          : "",
+                      borderWidth:
+                        selectedTicket?.ticket_id === ticket.ticket_id
+                          ? "2px"
+                          : "1px",
+                      backgroundColor:
+                        selectedTicket?.ticket_id === ticket.ticket_id
+                          ? "#f8f9fa"
+                          : "",
+                    }}
+                  >
+                    <div className="flex justify-between items-start">
+                      <div
+                        className="flex-grow cursor-pointer"
+                        onClick={() =>
+                          ticket.available > 0 && setSelectedTicket(ticket)
+                        }
+                      >
+                        <h3 className="font-semibold">{ticket.ticketName}</h3>
+                        <p className="text-gray-600">
+                          {formatToIDR(ticket.price)}
+                        </p>
+                        <p
+                          className={`text-sm ${
+                            ticket.available <= 0
+                              ? "text-red-500"
+                              : "text-gray-500"
+                          }`}
+                        >
+                          {ticket.available <= 0
+                            ? "Habis Terjual"
+                            : `Tersedia: ${ticket.available}`}
                         </p>
                       </div>
                       <div className="flex gap-2">
@@ -487,6 +585,97 @@ export default function EventDetailPage() {
               Pilih tiket untuk melihat detail.
             </div>
           )}
+        </div>
+      </div>
+      <div className="max-w-7xl mx-auto mt-8">
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-6">Reviews</h2>
+
+          {/* review form */}
+          <form onSubmit={handleSubmitReview} className="mb-8">
+            <div className="mb-4">
+              <div className="flex gap-2 mb-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setNewReview({ ...newReview, rating: star })}
+                    onMouseEnter={() => setHoveredStar(star)}
+                    onMouseLeave={() => setHoveredStar(0)}
+                    className="text-2xl"
+                  >
+                    <FaStar
+                      className={
+                        star <= (hoveredStar || newReview.rating)
+                          ? "text-yellow-400"
+                          : "text-gray-300"
+                      }
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="mb-4">
+              <textarea
+                value={newReview.comment}
+                onChange={(e) =>
+                  setNewReview({ ...newReview, comment: e.target.value })
+                }
+                className="w-full p-3 border rounded-md"
+                placeholder="Tulis review mu..."
+                rows={4}
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-customMediumBlue text-white rounded-md hover:bg-customDarkBlue"
+            >
+              Kirim Review
+            </button>
+          </form>
+
+          {/* reviews list */}
+          <div className="space-y-6">
+            {reviews.map((review) => (
+              <div key={review.id} className="border-b pb-6">
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
+                    {review.user.imgProfile ? (
+                      <img
+                        src={review.user.imgProfile}
+                        alt={review.user.username}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-customLightBlue text-white text-xl">
+                        {review.user.username[0].toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-semibold">{review.user.username}</p>
+                    <div className="flex gap-1">
+                      {Array.from({ length: 5 }).map((_, index) => (
+                        <FaStar
+                          key={index}
+                          className={
+                            index < review.rating
+                              ? "text-yellow-400"
+                              : "text-gray-300"
+                          }
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-500 ml-auto">
+                    {new Date(review.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <p className="text-gray-700">{review.comment}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
