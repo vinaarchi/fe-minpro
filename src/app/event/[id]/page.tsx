@@ -267,17 +267,24 @@ export default function EventDetailPage() {
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const userId = localStorage.getItem("userId");
+      console.log("Submitting review with userId:", userId);
+      console.log("Full review data:", {
+        ...newReview,
+        userId: parseInt(userId || "0"),
+      });
       const response = await axios.post(
         `http://localhost:3232/events/${id}/reviews`,
-        newReview
+        { ...newReview, userId: parseInt(userId || "0") }
       );
+      console.log("Review response:", response.data);
       setReviews([response.data, ...reviews]);
       setNewReview({ rating: 0, comment: "" });
     } catch (error) {
       console.error("Failed to submit review:", error);
     }
   };
-  const userId = localStorage.getItem("userId");
+  // const userId = localStorage.getItem("userId");
   const handleEditClick = (review: Review) => {
     setEditingReview(review.id);
     setEditForm({
@@ -745,7 +752,8 @@ export default function EventDetailPage() {
                     )}
                   </div>
 
-                  {review.userId === 2 && ( //hardcoded userid 2
+                  {review.userId ===
+                    parseInt(localStorage.getItem("userId") || "0") && ( //hardcoded userid 2
                     <div className="ml-auto flex gap-2">
                       {user.isAuth && user.role === "CUSTOMER" && (
                         <>
