@@ -94,9 +94,9 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
           <Link href="/about" className="text-white hover:underline">
             Tentang Eventra
           </Link>
-          <Link href="/create-event" className="text-white hover:underline">
+          {/* <Link href="/create-event" className="text-white hover:underline">
             Mulai Jadi Event Creator
-          </Link>
+          </Link> */}
           <Link href="/prices" className="text-white hover:underline">
             Biaya
           </Link>
@@ -252,9 +252,9 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
             <Link href="/about" className="text-white hover:underline">
               Tentang Eventra
             </Link>
-            <Link href="/create-event" className="text-white hover:underline">
+            {/* <Link href="/create-event" className="text-white hover:underline">
               Mulai Jadi Event Creator
-            </Link>
+            </Link> */}
             <Link href="/prices" className="text-white hover:underline">
               Biaya
             </Link>
