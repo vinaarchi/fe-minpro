@@ -41,6 +41,11 @@ interface EventDetail {
   image: string | null;
   createdAt: string;
   updatedAt: string;
+  locationDetail: {
+    province: string;
+    city: string;
+    district: string;
+  };
 }
 
 interface TicketData {
@@ -393,6 +398,13 @@ export default function EventDetailPage() {
               <FaMapMarkerAlt className="text-customLightBlue" />
               <span>{event.location}</span>
             </div>
+            {event.locationDetail && (
+              <div className="ml-6">
+                <p>Provinsi: {event.locationDetail.province}</p>
+                <p>Kota: {event.locationDetail.city}</p>
+                <p>Kecamatan: {event.locationDetail.district}</p>
+              </div>
+            )}
             <div className="flex items-center gap-2">
               <FaUsers className="text-customLightBlue" />
               <span>{event.heldBy}</span>
