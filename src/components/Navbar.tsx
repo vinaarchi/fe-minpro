@@ -38,14 +38,6 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
     router.push("/");
   };
 
-  // ini buat cek status user login dan akan mengarahkan
-  const handleExploreClick = () => {
-    if (!user.isAuth) {
-      router.push("/sign-in");
-    } else {
-      router.push("/");
-    }
-  };
   //search
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,13 +132,15 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
                 <FaCalendarAlt className="w-5 h-5 text-white" />
                 <span>Buat Event</span>
               </Link>
-              <button
-                onClick={handleExploreClick}
-                className="text-white flex items-center space-x-2 hover:underline"
-              >
-                <FaCompass className="w-5 h-5 text-white" />
-                <span>Jelajah</span>
-              </button>
+
+                <Link
+                  href="/events"
+                  className="text-white flex items-center space-x-2 hover:underline"
+                >
+                  <FaCompass className="w-5 h-5 text-white" />
+                  <span>Jelajah</span>
+                </Link>
+            
             </>
           )}
 
@@ -159,13 +153,13 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
                 <FaCalendarAlt className="w-5 h-5 text-white" />
                 <span>Tiket Saya</span>
               </Link>
-              <button
-                onClick={handleExploreClick}
-                className="text-white flex items-center space-x-2 hover:underline"
-              >
-                <FaCompass className="w-5 h-5 text-white" />
-                <span>Jelajah</span>
-              </button>
+              <Link
+                  href="/events"
+                  className="text-white flex items-center space-x-2 hover:underline"
+                >
+                  <FaCompass className="w-5 h-5 text-white" />
+                  <span>Jelajah</span>
+                </Link>
             </>
           )}
 
