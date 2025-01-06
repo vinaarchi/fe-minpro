@@ -15,6 +15,21 @@ import {
 import { Image as ImageIcon } from "lucide-react";
 import AuthGuard from "@/guard/AuthGuard";
 
+interface Province {
+  id: string;
+  name: string;
+}
+
+interface City {
+  id: string;
+  name: string;
+}
+
+interface District {
+  id: string;
+  name: string;
+}
+
 function EventCreationPage() {
   const router = useRouter();
 
@@ -32,13 +47,25 @@ function EventCreationPage() {
   const [imagePreview, setImagePreview] = useState<string>("");
   // const [createdEventId, setCreatedEventId] = useState<number | null>(null);
 
+  const [province, setProvince] = useState<Province | null>(null);
+  const [cities, setCities] = useState<City[]>([]);
+  const [selectedCity, setSelectedCity] = useState<City | null>(null);
+  const [districts, setDistricts] = useState<District[]>([]);
+  const [selectedDistrict, setSelectedDistrict] = useState<District | null>(
+    null
+  );
+  const [location, setLocation] = useState("");
+  const [isLoadingLocations, setIsLoadingLocations] = useState(false);
+
   useEffect(() => {
-    const fetchTopicsAndFormats = async () => {
+    const fetchInitialData = async () => {
       try {
-        const [topicsResponse, formatsResponse] = await Promise.all([
-          axios.get("http://localhost:3232/event-categories/topics"),
-          axios.get("http://localhost:3232/event-categories/formats"),
-        ]);
+        const [topicsResponse, formatsResponse, citiesResponse] =
+          await Promise.all([
+            axios.get("http://localhost:3232/event-categories/topics"),
+            axios.get("http://localhost:3232/event-categories/formats"),
+            axios.get("http://localhost:3232/locations/cities"),
+          ]);
 
         setTopics(
           Array.isArray(topicsResponse.data) ? topicsResponse.data : []
@@ -46,13 +73,32 @@ function EventCreationPage() {
         setFormats(
           Array.isArray(formatsResponse.data) ? formatsResponse.data : []
         );
+        setCities(citiesResponse.data);
+        setProvince({ id: "35", name: "Jawa Timur" });
       } catch (error) {
         console.error("Error fetching topics and formats:", error);
       }
     };
 
-    fetchTopicsAndFormats();
+    fetchInitialData();
   }, []);
+  const handleCityChange = async (cityId: string) => {
+    setIsLoadingLocations(true);
+    const city = cities.find((c) => c.id === cityId);
+    setSelectedCity(city || null);
+    setSelectedDistrict(null);
+
+    try {
+      const response = await axios.get(
+        `http://localhost:3232/locations/districts/${cityId}`
+      );
+      setDistricts(response.data);
+    } catch (error) {
+      console.error("Error fetching districts:", error);
+    } finally {
+      setIsLoadingLocations(false);
+    }
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -103,11 +149,22 @@ function EventCreationPage() {
           throw new Error("Failed to upload image");
         }
       }
+
+      const locationDetailResponse = await axios.post(
+        "http://localhost:3232/location-details",
+        {
+          province: province?.name || "Jawa Timur",
+          city: selectedCity?.name || "",
+          district: selectedDistrict?.name || "",
+        }
+      );
+
       const organiserId = localStorage.getItem("userId");
       const eventPayload = {
         name: eventName,
         description: eventDescription,
-        location: eventLocation,
+        location,
+        locationDetailId: locationDetailResponse.data.id,
         date: eventDate,
         time: `${eventTime}:00`,
         heldBy,
@@ -230,7 +287,7 @@ function EventCreationPage() {
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
-                    <div>
+                    {/* <div>
                       <label className="flex items-center text-sm font-medium text-customDarkBlue mb-1.5">
                         <MapPin className="w-4 h-4 mr-2" />
                         Lokasi
@@ -241,8 +298,63 @@ function EventCreationPage() {
                         onChange={(e) => setEventLocation(e.target.value)}
                         className="w-full px-3 py-1.5 rounded-md border border-customLightBlue/20 focus:outline-none focus:ring-2 focus:ring-customMediumBlue"
                       />
-                    </div>
+                    </div> */}
 
+                    <div className="space-y-4">
+                      <label className="flex items-center text-sm font-medium text-customDarkBlue mb-1.5">
+                        <MapPin className="w-4 h-4 mr-2" />
+                        Lokasi
+                      </label>
+
+                      <div className="grid grid-cols-1 gap-3">
+                        <input
+                          type="text"
+                          value="Jawa Timur"
+                          disabled
+                          className="w-full px-3 py-1.5 rounded-md border border-customLightBlue/20 bg-gray-100"
+                        />
+
+                        <select
+                          value={selectedCity?.id || ""}
+                          onChange={(e) => handleCityChange(e.target.value)}
+                          disabled={isLoadingLocations}
+                          className="w-full px-3 py-1.5 rounded-md border border-customLightBlue/20 focus:outline-none focus:ring-2 focus:ring-customMediumBlue"
+                        >
+                          <option value="">Pilih Kota/Kabupaten</option>
+                          {cities.map((city) => (
+                            <option key={city.id} value={city.id}>
+                              {city.name}
+                            </option>
+                          ))}
+                        </select>
+
+                        <select
+                          value={selectedDistrict?.id || ""}
+                          onChange={(e) => {
+                            const district = districts.find(
+                              (d) => d.id === e.target.value
+                            );
+                            setSelectedDistrict(district || null);
+                          }}
+                          disabled={!selectedCity || isLoadingLocations}
+                          className="w-full px-3 py-1.5 rounded-md border border-customLightBlue/20 focus:outline-none focus:ring-2 focus:ring-customMediumBlue"
+                        >
+                          <option value="">Pilih Kecamatan</option>
+                          {districts.map((district) => (
+                            <option key={district.id} value={district.id}>
+                              {district.name}
+                            </option>
+                          ))}
+                        </select>
+                        <input
+                          type="text"
+                          value={location}
+                          onChange={(e) => setLocation(e.target.value)}
+                          placeholder="Masukkan alamat lengkap"
+                          className="w-full px-3 py-1.5 rounded-md border border-customLightBlue/20 focus:outline-none focus:ring-2 focus:ring-customMediumBlue"
+                        />
+                      </div>
+                    </div>
                     <div>
                       <label className="flex items-center text-sm font-medium text-customDarkBlue mb-1.5">
                         <Calendar className="w-4 h-4 mr-2" />
