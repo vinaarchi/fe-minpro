@@ -184,7 +184,7 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
                     {user.isAuth && user.role === "ORGANIZER" && (
                       <>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/member/dashboard">Dashboard</Link>
+                          <Link href="/organizer/dashboard">Dashboard</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/member/event-list">Event Saya</Link>
