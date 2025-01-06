@@ -102,7 +102,7 @@ function EventCreationPage() {
           throw new Error("Failed to upload image");
         }
       }
-
+      const organiserId = localStorage.getItem("userId");
       const eventPayload = {
         name: eventName,
         description: eventDescription,
@@ -110,7 +110,7 @@ function EventCreationPage() {
         date: eventDate,
         time: `${eventTime}:00`,
         heldBy,
-        organiserId: 2,
+        organiserId: organiserId,
         image: imageUrl,
         category: {
           topic: selectedTopic,
