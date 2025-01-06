@@ -9,7 +9,7 @@ const OrgSidebar = () => {
     <div
       style={{
         width: "300px",
-        height: "100vh",
+        height: "150vh",
         backgroundColor: "#2d3250",
         paddingTop: "20px",
         paddingBottom: "100px",
@@ -22,9 +22,6 @@ const OrgSidebar = () => {
           </li>
           <li>
             <Link href="/member/event-list">Event Saya</Link>
-          </li>
-          <li>
-            <Link href="/organizer/rekening">Rekening</Link>
           </li>
           <li>
             <Link href="/organizer/informasi-dasar">Informasi Dasar</Link>
