@@ -19,14 +19,11 @@ const AuthGuard: React.FunctionComponent<IAuthGuardProps> = ({
   //ngambil data user dari redux
   const userData = useAppSelector((state) => state.userReducer);
 
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     if (!userData) {
       return; // tunggu sampe data user dimuat
     }
-
-    //jika data udah tersedia, set Loading ke false
-    setLoading(false);
 
     // cek apakah user memiliki role yang sesuai
     if (!allowedRoles.includes(userData.role as Role)) {

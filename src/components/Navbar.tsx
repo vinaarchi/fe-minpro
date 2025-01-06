@@ -133,14 +133,13 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
                 <span>Buat Event</span>
               </Link>
 
-                <Link
-                  href="/events"
-                  className="text-white flex items-center space-x-2 hover:underline"
-                >
-                  <FaCompass className="w-5 h-5 text-white" />
-                  <span>Jelajah</span>
-                </Link>
-            
+              <Link
+                href="/events"
+                className="text-white flex items-center space-x-2 hover:underline"
+              >
+                <FaCompass className="w-5 h-5 text-white" />
+                <span>Jelajah</span>
+              </Link>
             </>
           )}
 
@@ -154,12 +153,12 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
                 <span>Tiket Saya</span>
               </Link>
               <Link
-                  href="/events"
-                  className="text-white flex items-center space-x-2 hover:underline"
-                >
-                  <FaCompass className="w-5 h-5 text-white" />
-                  <span>Jelajah</span>
-                </Link>
+                href="/events"
+                className="text-white flex items-center space-x-2 hover:underline"
+              >
+                <FaCompass className="w-5 h-5 text-white" />
+                <span>Jelajah</span>
+              </Link>
             </>
           )}
 
@@ -182,9 +181,6 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/member/event-list">Event Saya</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/organizer/rekening">Rekening</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/organizer/informasi-dasar">
