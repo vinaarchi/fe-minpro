@@ -14,6 +14,7 @@ import {
   FaTrash,
   FaSave,
 } from "react-icons/fa";
+import { useAppSelector } from "@/lib/redux/hooks";
 
 interface Review {
   id: number;
@@ -87,6 +88,7 @@ export default function EventDetailPage() {
     rating: 0,
     comment: "",
   });
+  const user = useAppSelector((state) => state.userReducer);
 
   useEffect(() => {
     if (!id) {
@@ -270,7 +272,7 @@ export default function EventDetailPage() {
       console.error("Failed to submit review:", error);
     }
   };
-
+  const userId = localStorage.getItem("userId");
   const handleEditClick = (review: Review) => {
     setEditingReview(review.id);
     setEditForm({
@@ -381,12 +383,16 @@ export default function EventDetailPage() {
             <h1 className="text-3xl font-bold text-customMediumBlue">
               {event.name}
             </h1>
-            <button
-              onClick={handleEditEvent}
-              className="px-4 py-2 bg-customLightBlue text-white rounded-md hover:bg-customMediumBlue transition-colors flex items-center gap-2"
-            >
-              <FaEdit /> Edit Event
-            </button>
+            {user.isAuth && user.role === "ORGANIZER" && (
+              <>
+                <button
+                  onClick={handleEditEvent}
+                  className="px-4 py-2 bg-customLightBlue text-white rounded-md hover:bg-customMediumBlue transition-colors flex items-center gap-2"
+                >
+                  <FaEdit /> Edit Event
+                </button>
+              </>
+            )}
           </div>
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -445,12 +451,16 @@ export default function EventDetailPage() {
             <div>
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">Tiket Tersedia</h2>
-                <button
-                  onClick={handleCreateTicket}
-                  className="px-4 py-2 bg-customOrange text-white rounded-md hover:bg-[#f57b1d]"
-                >
-                  Buat Tiket
-                </button>
+                {user.isAuth && user.role === "ORGANIZER" && (
+                  <>
+                    <button
+                      onClick={handleCreateTicket}
+                      className="px-4 py-2 bg-customOrange text-white rounded-md hover:bg-[#f57b1d]"
+                    >
+                      Buat Tiket
+                    </button>
+                  </>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -498,51 +508,59 @@ export default function EventDetailPage() {
                             : `Tersedia: ${ticket.available}`}
                         </p>
                       </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            router.push(
-                              `/edit-ticket/${ticket.ticket_id}?eventId=${event.event_id}`
-                            );
-                          }}
-                          className="p-2 text-customLightBlue hover:text-customMediumBlue"
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          onClick={async (e) => {
-                            e.stopPropagation();
-                            if (
-                              window.confirm(
-                                "Apakah Anda yakin ingin menghapus tiket ini?"
-                              )
-                            ) {
-                              try {
-                                await axios.delete(
-                                  `http://localhost:3232/tickets/${ticket.ticket_id}`
+                      {user.isAuth && user.role === "ORGANIZER" && (
+                        <>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                router.push(
+                                  `/edit-ticket/${ticket.ticket_id}?eventId=${event.event_id}`
                                 );
-                                setAllTickets((tickets) =>
-                                  tickets.filter(
-                                    (t) => t.ticket_id !== ticket.ticket_id
-                                  )
-                                );
+                              }}
+                              className="p-2 text-customLightBlue hover:text-customMediumBlue"
+                            >
+                              <FaEdit />
+                            </button>
+                            <button
+                              onClick={async (e) => {
+                                e.stopPropagation();
                                 if (
-                                  selectedTicket?.ticket_id === ticket.ticket_id
+                                  window.confirm(
+                                    "Apakah Anda yakin ingin menghapus tiket ini?"
+                                  )
                                 ) {
-                                  setSelectedTicket(null);
+                                  try {
+                                    await axios.delete(
+                                      `http://localhost:3232/tickets/${ticket.ticket_id}`
+                                    );
+                                    setAllTickets((tickets) =>
+                                      tickets.filter(
+                                        (t) => t.ticket_id !== ticket.ticket_id
+                                      )
+                                    );
+                                    if (
+                                      selectedTicket?.ticket_id ===
+                                      ticket.ticket_id
+                                    ) {
+                                      setSelectedTicket(null);
+                                    }
+                                  } catch (err) {
+                                    console.error(
+                                      "Failed to delete ticket:",
+                                      err
+                                    );
+                                    alert("Gagal menghapus tiket");
+                                  }
                                 }
-                              } catch (err) {
-                                console.error("Failed to delete ticket:", err);
-                                alert("Gagal menghapus tiket");
-                              }
-                            }
-                          }}
-                          className="p-2 text-red-500 hover:text-red-700"
-                        >
-                          <FaTimes />
-                        </button>
-                      </div>
+                              }}
+                              className="p-2 text-red-500 hover:text-red-700"
+                            >
+                              <FaTimes />
+                            </button>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -586,12 +604,16 @@ export default function EventDetailPage() {
                   </p>
                 </div>
               </div>
-              <button
-                onClick={handleBuyTicket}
-                className="w-full py-3 bg-customMediumBlue text-white rounded-md hover:bg-customDarkBlue"
-              >
-                Beli Tiket
-              </button>
+              {user.isAuth && user.role === "CUSTOMER" && (
+                <>
+                  <button
+                    onClick={handleBuyTicket}
+                    className="w-full py-3 bg-customMediumBlue text-white rounded-md hover:bg-customDarkBlue"
+                  >
+                    Beli Tiket
+                  </button>
+                </>
+              )}
             </div>
           ) : (
             <div className="h-full flex items-center justify-center text-gray-500">
@@ -605,48 +627,54 @@ export default function EventDetailPage() {
           <h2 className="text-2xl font-semibold mb-6">Reviews</h2>
 
           {/* review form */}
-          <form onSubmit={handleSubmitReview} className="mb-8">
-            <div className="mb-4">
-              <div className="flex gap-2 mb-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    type="button"
-                    onClick={() => setNewReview({ ...newReview, rating: star })}
-                    onMouseEnter={() => setHoveredStar(star)}
-                    onMouseLeave={() => setHoveredStar(0)}
-                    className="text-2xl"
-                  >
-                    <FaStar
-                      className={
-                        star <= (hoveredStar || newReview.rating)
-                          ? "text-yellow-400"
-                          : "text-gray-300"
-                      }
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="mb-4">
-              <textarea
-                value={newReview.comment}
-                onChange={(e) =>
-                  setNewReview({ ...newReview, comment: e.target.value })
-                }
-                className="w-full p-3 border rounded-md"
-                placeholder="Tulis review mu..."
-                rows={4}
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-customMediumBlue text-white rounded-md hover:bg-customDarkBlue"
-            >
-              Kirim Review
-            </button>
-          </form>
+          {user.isAuth && user.role === "CUSTOMER" && (
+            <>
+              <form onSubmit={handleSubmitReview} className="mb-8">
+                <div className="mb-4">
+                  <div className="flex gap-2 mb-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() =>
+                          setNewReview({ ...newReview, rating: star })
+                        }
+                        onMouseEnter={() => setHoveredStar(star)}
+                        onMouseLeave={() => setHoveredStar(0)}
+                        className="text-2xl"
+                      >
+                        <FaStar
+                          className={
+                            star <= (hoveredStar || newReview.rating)
+                              ? "text-yellow-400"
+                              : "text-gray-300"
+                          }
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <textarea
+                    value={newReview.comment}
+                    onChange={(e) =>
+                      setNewReview({ ...newReview, comment: e.target.value })
+                    }
+                    className="w-full p-3 border rounded-md"
+                    placeholder="Tulis review mu..."
+                    rows={4}
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-customMediumBlue text-white rounded-md hover:bg-customDarkBlue"
+                >
+                  Kirim Review
+                </button>
+              </form>
+            </>
+          )}
 
           {/* reviews list */}
           <div className="space-y-6">
@@ -704,41 +732,46 @@ export default function EventDetailPage() {
                       </div>
                     )}
                   </div>
+
                   {review.userId === 2 && ( //hardcoded userid 2
                     <div className="ml-auto flex gap-2">
-                      {editingReview === review.id ? (
+                      {user.isAuth && user.role === "CUSTOMER" && (
                         <>
-                          <button
-                            onClick={() => handleUpdateReview(review.id)}
-                            className="p-1 text-customMediumBlue hover:text-customDarkBlue flex items-center gap-1"
-                            title="Save"
-                          >
-                            <FaSave />
-                          </button>
-                          <button
-                            onClick={() => setEditingReview(null)}
-                            className="p-1 text-gray-600 hover:text-gray-800 flex items-center gap-1"
-                            title="Cancel"
-                          >
-                            <FaTimes />
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            onClick={() => handleEditClick(review)}
-                            className="p-1 text-customMediumBlue hover:text-customDarkBlue"
-                            title="Edit review"
-                          >
-                            <FaEdit />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteReview(review.id)}
-                            className="p-1 text-customOrange hover:text-red-800"
-                            title="Delete review"
-                          >
-                            <FaTrash />
-                          </button>
+                          {editingReview === review.id ? (
+                            <>
+                              <button
+                                onClick={() => handleUpdateReview(review.id)}
+                                className="p-1 text-customMediumBlue hover:text-customDarkBlue flex items-center gap-1"
+                                title="Save"
+                              >
+                                <FaSave />
+                              </button>
+                              <button
+                                onClick={() => setEditingReview(null)}
+                                className="p-1 text-gray-600 hover:text-gray-800 flex items-center gap-1"
+                                title="Cancel"
+                              >
+                                <FaTimes />
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <button
+                                onClick={() => handleEditClick(review)}
+                                className="p-1 text-customMediumBlue hover:text-customDarkBlue"
+                                title="Edit review"
+                              >
+                                <FaEdit />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteReview(review.id)}
+                                className="p-1 text-customOrange hover:text-red-800"
+                                title="Delete review"
+                              >
+                                <FaTrash />
+                              </button>
+                            </>
+                          )}
                         </>
                       )}
                     </div>
