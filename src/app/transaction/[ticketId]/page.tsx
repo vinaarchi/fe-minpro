@@ -18,6 +18,13 @@ interface BankAccount {
   number: string;
   holder: string;
 }
+interface TransactionPayload {
+  ticketId: number;
+  userId: number;
+  finalPrice: number;
+  promoCode?: string;
+  proofImage?: string | ArrayBuffer | null;
+}
 
 const BankAccounts: BankAccount[] = [
   { name: "BCA", number: "1234567890", holder: "PT Event Organizer" },
@@ -44,7 +51,7 @@ export default function TransactionPage() {
         );
         console.log("Ticket response:", response.data);
         setTicket(response.data);
-        setFinalPrice(response.data.price);
+        setFinalPrice(response.data.price > 0 ? response.data.price : 0);
       } catch (err) {
         console.error("Failed to fetch ticket:", err);
       } finally {
@@ -94,43 +101,66 @@ export default function TransactionPage() {
 
   const handleSubmit = async () => {
     try {
-      if (!proofImage || !ticket) return;
+      if (!ticket) {
+        alert("Ticket information not found");
+        return;
+      }
 
-      const reader = new FileReader();
-      reader.readAsDataURL(proofImage);
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        alert("Please log in to continue");
+        return;
+      }
 
-      reader.onload = async () => {
-        const base64Image = reader.result;
+      if (ticket.price > 0 && !proofImage) {
+        alert("Please upload payment proof for paid tickets");
+        return;
+      }
 
-        const payload = {
-          ticketId: params.ticketId,
-          userId: 2, //demo
-          promoCode,
-          finalPrice,
-          proofImage: base64Image,
-        };
+      const calculatedFinalPrice =
+        ticket.price > 0 ? ticket.price - discount : 0;
 
-        const response = await axios.post(
-          "http://localhost:3232/transactions",
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (response.status === 201) {
-          alert("Transaction successful!");
-          router.push("/my-tickets");
-        }
+      const payload: TransactionPayload = {
+        ticketId: Number(params.ticketId),
+        userId: Number(userId),
+        finalPrice: calculatedFinalPrice,
+        promoCode: promoCode || undefined,
       };
-    } catch (err) {
+
+      if (proofImage) {
+        const reader = new FileReader();
+        reader.readAsDataURL(proofImage);
+        await new Promise((resolve) => {
+          reader.onload = () => {
+            payload.proofImage = reader.result;
+            resolve(null);
+          };
+        });
+      }
+
+      const response = await axios.post(
+        "http://localhost:3232/transactions",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        alert("Transaction successful!");
+        router.push("/member/tiket-saya");
+      }
+    } catch (err: any) {
       console.error("Transaction failed:", err);
-      alert("Transaction failed. Please try again.");
+      const errorMessage =
+        err.response?.data?.details ||
+        err.response?.data?.message ||
+        "Transaction failed. Please try again.";
+      alert(errorMessage);
     }
   };
-
   if (loading) return <div>Loading...</div>;
   if (!ticket) return <div>Ticket not found</div>;
 
@@ -140,75 +170,87 @@ export default function TransactionPage() {
         <h1 className="text-2xl font-bold mb-6">Checkout</h1>
 
         <div className="grid grid-cols-2 gap-8">
-          <div>
-            <h2 className="text-lg font-semibold mb-4">Detail Pembayaran</h2>
+          {ticket.price > 0 && (
+            <div>
+              <h2 className="text-lg font-semibold mb-4">Detail Pembayaran</h2>
 
-            <div className="space-y-4">
-              {BankAccounts.map((account) => (
-                <div key={account.number} className="border p-4 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <FaCreditCard />
-                    <span className="font-semibold">{account.name}</span>
+              <div className="space-y-4">
+                {BankAccounts.map((account) => (
+                  <div key={account.number} className="border p-4 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <FaCreditCard />
+                      <span className="font-semibold">{account.name}</span>
+                    </div>
+                    <p className="text-lg font-mono mt-2">{account.number}</p>
+                    <p className="text-sm text-gray-600">{account.holder}</p>
                   </div>
-                  <p className="text-lg font-mono mt-2">{account.number}</p>
-                  <p className="text-sm text-gray-600">{account.holder}</p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
 
-            <div className="mt-6">
-              <label className="block mb-2">Kode Promo</label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={promoCode}
-                  onChange={(e) => setPromoCode(e.target.value)}
-                  className="border rounded px-3 py-2 flex-grow"
-                  placeholder="Masukkan kode promo"
-                />
-                <button
-                  onClick={checkPromoCode}
-                  className="bg-blue-500 text-white px-4 py-2 rounded"
-                >
-                  Gunakan
-                </button>
+              <div className="mt-6">
+                <label className="block mb-2">Kode Promo</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value)}
+                    className="border rounded px-3 py-2 flex-grow"
+                    placeholder="Masukkan kode promo"
+                  />
+                  <button
+                    onClick={checkPromoCode}
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                  >
+                    Gunakan
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+          <div className={ticket.price > 0 ? "" : "col-span-2"}>
+            {ticket.price > 0 && (
+              <>
+                <h2 className="text-lg font-semibold mb-4">
+                  Upload Bukti Pembayaran
+                </h2>
 
-          <div>
-            <h2 className="text-lg font-semibold mb-4">
-              Upload Bukti Pembayaran
-            </h2>
-
-            <div className="border-2 border-dashed rounded-lg p-4 text-center">
-              <input
-                type="file"
-                onChange={handleImageChange}
-                className="hidden"
-                id="proofUpload"
-                accept="image/*"
-              />
-              <label htmlFor="proofUpload" className="cursor-pointer block p-4">
-                {previewUrl ? (
-                  <img
-                    src={previewUrl}
-                    alt="Bukti pembayaran"
-                    className="max-w-full h-auto mx-auto"
+                <div className="border-2 border-dashed rounded-lg p-4 text-center">
+                  <input
+                    type="file"
+                    onChange={handleImageChange}
+                    className="hidden"
+                    id="proofUpload"
+                    accept="image/*"
                   />
-                ) : (
-                  <div className="flex flex-col items-center">
-                    <FaUpload className="text-3xl mb-2" />
-                    <p>Klik untuk upload bukti pembayaran</p>
-                  </div>
-                )}
-              </label>
-            </div>
+                  <label
+                    htmlFor="proofUpload"
+                    className="cursor-pointer block p-4"
+                  >
+                    {previewUrl ? (
+                      <img
+                        src={previewUrl}
+                        alt="Bukti pembayaran"
+                        className="max-w-full h-auto mx-auto"
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center">
+                        <FaUpload className="text-3xl mb-2" />
+                        <p>Klik untuk upload bukti pembayaran</p>
+                      </div>
+                    )}
+                  </label>
+                </div>
+              </>
+            )}
 
             <div className="mt-6 space-y-2">
               <div className="flex justify-between">
                 <span>Harga Tiket</span>
-                <span>Rp {ticket.price.toLocaleString()}</span>
+                <span>
+                  {ticket.price > 0
+                    ? `Rp ${ticket.price.toLocaleString()}`
+                    : "Gratis"}
+                </span>
               </div>
               {discount > 0 && (
                 <div className="flex justify-between text-green-600">
@@ -218,7 +260,11 @@ export default function TransactionPage() {
               )}
               <div className="flex justify-between font-bold text-lg pt-2 border-t">
                 <span>Total</span>
-                <span>Rp {finalPrice.toLocaleString()}</span>
+                <span>
+                  {finalPrice > 0
+                    ? `Rp ${finalPrice.toLocaleString()}`
+                    : "Gratis"}
+                </span>
               </div>
             </div>
 
