@@ -277,7 +277,7 @@ export default function EventDetailPage() {
         `http://localhost:3232/events/${id}/reviews`,
         { ...newReview, userId: parseInt(userId || "0") }
       );
-      console.log("Review response:", response.data);
+      console.log("Review response ini:", response.data);
       setReviews([response.data, ...reviews]);
       setNewReview({ rating: 0, comment: "" });
     } catch (error) {
