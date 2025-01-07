@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FaCalendar, FaRegMoneyBillAlt, FaChartLine } from "react-icons/fa";
@@ -9,15 +9,174 @@ import AuthGuard from "@/guard/AuthGuard";
 import OrgSidebar from "@/components/OrgSideBar";
 import Image from "next/image";
 
+import axios from "axios";
+import { stat } from "fs";
+import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+
 const Dashboard = () => {
-  const [ticketCount, setTicketCount] = useState<number>(0);
+  const [eventCount, setEventCount] = useState<number>(0);
   const [transactionCount, setTransactionCount] = useState<number>(0);
   const [ticketSold, setTicketSold] = useState<number>(0);
   const [totalPerson, setTotalPerson] = useState<number>(0);
+  const [monthlyStats, setMonthlyStats] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // useEffect (() => {
+  //ini buat total event yang telah dibuat
+  useEffect(() => {
+    const totalEvent = async () => {
+      const userId = localStorage.getItem("userId");
 
-  // })
+      if (!userId) {
+        setError("User ID is not found");
+        return;
+      }
+      setLoading(true);
+
+      try {
+        const response = await axios.get(
+          `http://localhost:3232/events/total-events/${userId}`
+        );
+        setEventCount(response.data.result);
+      } catch (error) {
+        setError("Failed to fetch total events");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    totalEvent();
+  }, []);
+
+  //ini buat total transaksi yang udah dibeli
+  useEffect(() => {
+    const totalTransaction = async () => {
+      const userId = localStorage.getItem("userId");
+
+      if (!userId) {
+        setError("User ID is not found");
+        return;
+      }
+      setLoading(true);
+
+      try {
+        const response = await axios.get(
+          `http://localhost:3232/transactions/total-earnings/organizer/${userId}`
+        );
+        setTransactionCount(response.data.result);
+      } catch (error) {
+        setError("Failed to fetch total Transaction");
+      } finally {
+        setLoading(false);
+      }
+    };
+    totalTransaction();
+  }, []);
+
+  //ini buat total tiket yang terjual
+  useEffect(() => {
+    const totalTickets = async () => {
+      const userId = localStorage.getItem("userId");
+
+      if (!userId) {
+        setError("User ID is not found");
+        return;
+      }
+      setLoading(true);
+
+      try {
+        const response = await axios.get(
+          `http://localhost:3232/tickets/total-ticket/organizer/${userId}`
+        );
+        setTicketSold(response.data.result);
+      } catch (error) {
+        setError("Failed to fetch total Tickets");
+      } finally {
+        setLoading(false);
+      }
+    };
+    totalTickets();
+  }, []);
+
+  //ini buat total ticket yang
+  useEffect(() => {
+    const totalCustomer = async () => {
+      const userId = localStorage.getItem("userId");
+
+      if (!userId) {
+        setError("User ID is not found");
+        return;
+      }
+      setLoading(true);
+
+      try {
+        const response = await axios.get(
+          `http://localhost:3232/tickets/total-customer/all-event/${userId}`
+        );
+        setTotalPerson(response.data.result);
+      } catch (error) {
+        setError("Failed to fetch total Customer");
+      } finally {
+        setLoading(false);
+      }
+    };
+    totalCustomer();
+  }, []);
+
+  // ini buat monthly nya
+  useEffect(() => {
+    const fetchStats = async () => {
+      const userId = localStorage.getItem("userId");
+
+      if (!userId) {
+        console.log("User ID is not found");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `http://localhost:3232/transactions/organizer/${userId}/stats`
+        );
+
+        console.log("Data Berhasil didapatkan", response.data);
+
+        setMonthlyStats(response.data.monthlyBreakdown);
+      } catch (error) {
+        console.error("Failed to fetch monthly stats", error);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  //format data untuk chart
+  const chartData = monthlyStats.map((stat) => ({
+    month: `${stat.month}/${stat.year}`,
+    earnings: stat.earnings,
+    ticketsSold: stat.ticketsSold,
+  }));
+
+  //ngatur konfigurasi chart (label dan warna)
+  const chartConfig = {
+    earnings: {
+      label: "Pendapatan",
+      color: "rgb(45, 50, 80)",
+    },
+    ticketsSold: {
+      label: "Ticket Terjual",
+      color: "rgb(249, 177, 122)",
+    },
+  } satisfies ChartConfig;
+
+
   return (
     <AuthGuard allowedRoles={["ORGANIZER"]}>
       <div>
@@ -45,7 +204,9 @@ const Dashboard = () => {
                       <hr />
                       <CardContent className="p-4">
                         <div className="text-2xl">
-                          <label>{ticketCount} Event</label>
+
+                          <label>{eventCount} Event</label>
+
                         </div>
                       </CardContent>
                     </CardHeader>
@@ -96,7 +257,57 @@ const Dashboard = () => {
             </div>
             <div className="pt-10">
               <div className=" font-ibrand text-5xl">
-                <h1>Statistic Management</h1>
+
+                <h1>Pendapatan & Tiket Terjual</h1>
+                <div className="overflow-hidden mt-10">
+                  <ChartContainer
+                    config={chartConfig}
+                    className="min-h-[100px] w-96"
+                  >
+                    <BarChart
+                      data={chartData}
+                      layout="horizontal"
+                      margin={{ top: 20, right: 30, left: 30, bottom: 20 }}
+                    >
+                      <CartesianGrid vertical={false} />
+                      <YAxis
+                        label={{
+                          value: "Pendapatan / Tiket Terjual",
+                          angle: -90,
+                          position: "center",
+                          offset: 20,
+                        }}
+                        tickLine={false}
+                        axisLine={false}
+                        ticks={[]}
+                        tickFormatter={() => ""}
+                      />
+                      <XAxis
+                        dataKey="month"
+                        tickLine={false}
+                        tickMargin={10}
+                        axisLine={false}
+                      />
+                      <Tooltip />
+                      <Legend />
+                      <Bar
+                        dataKey="earnings"
+                        fill={chartConfig.earnings.color}
+                        radius={4}
+                        barSize={40}
+                     stackId="a"
+                      />
+                      <Bar
+                        dataKey="ticketsSold"
+                        fill={chartConfig.ticketsSold.color}
+                        radius={4}
+                        barSize={40}
+                      stackId="b"
+                      />
+                    </BarChart>
+                  </ChartContainer>
+                </div>
+
               </div>
             </div>
           </div>
