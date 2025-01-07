@@ -182,43 +182,56 @@ export default function CreateTicketPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+              <div className="space-y-4">
+                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                   <CreditCard className="w-4 h-4" />
                   Tipe
                 </label>
-                <select
-                  name="type"
-                  value={formData.type}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-customMediumBlue"
-                >
-                  <option value="paid">Berbayar</option>
-                  <option value="free">Gratis</option>
-                </select>
-              </div>
-
-              {formData.type === "paid" && (
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                    <CreditCard className="w-4 h-4" />
-                    Harga
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="type"
+                      value="paid"
+                      checked={formData.type === "paid"}
+                      onChange={handleChange}
+                      className="w-4 h-4 text-customMediumBlue"
+                    />
+                    <span className="text-sm">Berbayar</span>
                   </label>
-                  <input
-                    type="text"
-                    name="price"
-                    value={
-                      formData.type === "paid" && formData.price
-                        ? formatRupiah(formData.price)
-                        : ""
-                    }
-                    onChange={handleChange}
-                    required={formData.type === "paid"}
-                    className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-customMediumBlue"
-                  />
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="type"
+                      value="free"
+                      checked={formData.type === "free"}
+                      onChange={handleChange}
+                      className="w-4 h-4 text-customMediumBlue"
+                    />
+                    <span className="text-sm">Gratis</span>
+                  </label>
                 </div>
-              )}
+                {formData.type === "paid" && (
+                  <div>
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <CreditCard className="w-4 h-4" />
+                      Harga
+                    </label>
+                    <input
+                      type="text"
+                      name="price"
+                      value={
+                        formData.type === "paid" && formData.price
+                          ? formatRupiah(formData.price)
+                          : ""
+                      }
+                      onChange={handleChange}
+                      required={formData.type === "paid"}
+                      className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-customMediumBlue"
+                    />
+                  </div>
+                )}
+              </div>
 
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
@@ -236,7 +249,6 @@ export default function CreateTicketPage() {
                 />
               </div>
             </div>
-
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">

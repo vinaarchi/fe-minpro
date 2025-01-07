@@ -8,6 +8,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import AuthGuard from "@/guard/AuthGuard";
 import OrgSidebar from "@/components/OrgSideBar";
 import Image from "next/image";
+
 import axios from "axios";
 import { stat } from "fs";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
@@ -175,6 +176,7 @@ const Dashboard = () => {
     },
   } satisfies ChartConfig;
 
+
   return (
     <AuthGuard allowedRoles={["ORGANIZER"]}>
       <div>
@@ -202,7 +204,9 @@ const Dashboard = () => {
                       <hr />
                       <CardContent className="p-4">
                         <div className="text-2xl">
+
                           <label>{eventCount} Event</label>
+
                         </div>
                       </CardContent>
                     </CardHeader>
@@ -253,6 +257,7 @@ const Dashboard = () => {
             </div>
             <div className="pt-10">
               <div className=" font-ibrand text-5xl">
+
                 <h1>Pendapatan & Tiket Terjual</h1>
                 <div className="overflow-hidden mt-10">
                   <ChartContainer
@@ -302,6 +307,7 @@ const Dashboard = () => {
                     </BarChart>
                   </ChartContainer>
                 </div>
+
               </div>
             </div>
           </div>
