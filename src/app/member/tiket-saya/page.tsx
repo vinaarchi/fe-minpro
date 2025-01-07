@@ -21,6 +21,7 @@ interface Transaction {
   ticket: {
     ticketName: string;
     event: {
+      id: number;
       name: string;
       date: string;
       time: string;
@@ -50,6 +51,7 @@ export default function TicketSaya() {
         const response = await axios.get(
           `http://localhost:3232/transactions/user/${userId}`
         );
+        console.log("API Response:", response.data);
         setTickets(response.data);
       } catch (err) {
         console.log("Failed to fetch tickets:", err);
@@ -150,6 +152,12 @@ export default function TicketSaya() {
                       Rp {transaction.finalPrice.toLocaleString()}
                     </span>
                   </div>
+                  <Link
+                    href={`/event/${transaction?.ticket?.event?.id}`}
+                    className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors text-center block"
+                  >
+                    Write a Review
+                  </Link>
                 </div>
               </div>
             </div>
