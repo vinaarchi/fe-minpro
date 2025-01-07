@@ -63,7 +63,16 @@ interface TicketData {
   contactEmail: string;
   contactNumber: string;
 }
-
+interface Promotion {
+  promotion_id: number;
+  type: "PERCENTAGE" | "FLAT";
+  value: number;
+  promotionCode: string;
+  startDate: string;
+  expirationDate: string;
+  maxUse: number;
+  useCount: number;
+}
 export default function EventDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -77,10 +86,10 @@ export default function EventDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [allTickets, setAllTickets] = useState<TicketData[]>([]);
   const [showNotification, setShowNotification] = useState(!!newTicketId);
-
-  const [activeTab, setActiveTab] = useState<"description" | "tickets">(
-    "description"
-  );
+  const [promotions, setPromotions] = useState<Promotion[]>([]);
+  const [activeTab, setActiveTab] = useState<
+    "description" | "tickets" | "promotions"
+  >("description");
   const [selectedTicket, setSelectedTicket] = useState<TicketData | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [newReview, setNewReview] = useState({
@@ -199,6 +208,23 @@ export default function EventDetailPage() {
 
     fetchNewTicket();
   }, [newTicketId, id]);
+
+  useEffect(() => {
+    const fetchPromotions = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3232/events/${id}/promotions`
+        );
+        setPromotions(response.data);
+      } catch (error) {
+        console.error("Failed to fetch promotions:", error);
+      }
+    };
+
+    if (id) {
+      fetchPromotions();
+    }
+  }, [id]);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -455,23 +481,31 @@ export default function EventDetailPage() {
             >
               Tiket
             </button>
+            <button
+              onClick={() => setActiveTab("promotions")}
+              className={`px-4 py-2 rounded-md ${
+                activeTab === "promotions"
+                  ? "bg-customMediumBlue text-white"
+                  : "bg-gray-100 text-gray-600"
+              }`}
+            >
+              Promosi
+            </button>
           </div>
 
           {activeTab === "description" ? (
             <div className="prose">{event.description}</div>
-          ) : (
+          ) : activeTab === "tickets" ? (
             <div>
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">Tiket Tersedia</h2>
                 {user.isAuth && user.role === "ORGANIZER" && (
-                  <>
-                    <button
-                      onClick={handleCreateTicket}
-                      className="px-4 py-2 bg-customOrange text-white rounded-md hover:bg-[#f57b1d]"
-                    >
-                      Buat Tiket
-                    </button>
-                  </>
+                  <button
+                    onClick={handleCreateTicket}
+                    className="px-4 py-2 bg-customOrange text-white rounded-md hover:bg-[#f57b1d]"
+                  >
+                    Buat Tiket
+                  </button>
                 )}
               </div>
 
@@ -521,61 +555,150 @@ export default function EventDetailPage() {
                         </p>
                       </div>
                       {user.isAuth && user.role === "ORGANIZER" && (
-                        <>
-                          <div className="flex gap-2">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                router.push(
-                                  `/edit-ticket/${ticket.ticket_id}?eventId=${event.event_id}`
-                                );
-                              }}
-                              className="p-2 text-customLightBlue hover:text-customMediumBlue"
-                            >
-                              <FaEdit />
-                            </button>
-                            <button
-                              onClick={async (e) => {
-                                e.stopPropagation();
-                                if (
-                                  window.confirm(
-                                    "Apakah Anda yakin ingin menghapus tiket ini?"
-                                  )
-                                ) {
-                                  try {
-                                    await axios.delete(
-                                      `http://localhost:3232/tickets/${ticket.ticket_id}`
-                                    );
-                                    setAllTickets((tickets) =>
-                                      tickets.filter(
-                                        (t) => t.ticket_id !== ticket.ticket_id
-                                      )
-                                    );
-                                    if (
-                                      selectedTicket?.ticket_id ===
-                                      ticket.ticket_id
-                                    ) {
-                                      setSelectedTicket(null);
-                                    }
-                                  } catch (err) {
-                                    console.error(
-                                      "Failed to delete ticket:",
-                                      err
-                                    );
-                                    alert("Gagal menghapus tiket");
+                        <div className="flex gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/edit-ticket/${ticket.ticket_id}?eventId=${event.event_id}`
+                              );
+                            }}
+                            className="p-2 text-customLightBlue hover:text-customMediumBlue"
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              if (
+                                window.confirm(
+                                  "Apakah Anda yakin ingin menghapus tiket ini?"
+                                )
+                              ) {
+                                try {
+                                  await axios.delete(
+                                    `http://localhost:3232/tickets/${ticket.ticket_id}`
+                                  );
+                                  setAllTickets((tickets) =>
+                                    tickets.filter(
+                                      (t) => t.ticket_id !== ticket.ticket_id
+                                    )
+                                  );
+                                  if (
+                                    selectedTicket?.ticket_id ===
+                                    ticket.ticket_id
+                                  ) {
+                                    setSelectedTicket(null);
                                   }
+                                } catch (err) {
+                                  console.error(
+                                    "Failed to delete ticket:",
+                                    err
+                                  );
+                                  alert("Gagal menghapus tiket");
                                 }
-                              }}
-                              className="p-2 text-red-500 hover:text-red-700"
-                            >
-                              <FaTimes />
-                            </button>
-                          </div>
-                        </>
+                              }
+                            }}
+                            className="p-2 text-red-500 hover:text-red-700"
+                          >
+                            <FaTimes />
+                          </button>
+                        </div>
                       )}
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">Daftar Promosi</h2>
+                {user.isAuth && user.role === "ORGANIZER" && (
+                  <button
+                    onClick={() =>
+                      router.push(`/create-promotion?eventId=${event.event_id}`)
+                    }
+                    className="px-4 py-2 bg-customMediumBlue text-white rounded-md hover:bg-customDarkBlue"
+                  >
+                    Buat Promosi
+                  </button>
+                )}
+              </div>
+
+              <div className="space-y-4">
+                {promotions.length > 0 ? (
+                  promotions.map((promo) => (
+                    <div
+                      key={promo.promotion_id}
+                      className="p-4 border border-gray-200 rounded-md hover:border-gray-300"
+                    >
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-semibold">
+                            Kode: {promo.promotionCode}
+                          </h3>
+                          <p className="text-gray-600">
+                            {promo.type === "PERCENTAGE"
+                              ? `${promo.value}% OFF`
+                              : formatToIDR(promo.value)}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Digunakan: {promo.useCount} dari {promo.maxUse}
+                          </p>
+                          <div className="text-xs text-gray-400 mt-1">
+                            <p>
+                              Mulai:{" "}
+                              {new Date(promo.startDate).toLocaleDateString()}
+                            </p>
+                            <p>
+                              Berakhir:{" "}
+                              {new Date(
+                                promo.expirationDate
+                              ).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        {user.isAuth && user.role === "ORGANIZER" && (
+                          <button
+                            onClick={async () => {
+                              if (
+                                window.confirm(
+                                  "Yakin ingin menghapus promosi ini?"
+                                )
+                              ) {
+                                try {
+                                  await axios.delete(
+                                    `http://localhost:3232/promotions/${promo.promotion_id}`
+                                  );
+                                  setPromotions(
+                                    promotions.filter(
+                                      (p) =>
+                                        p.promotion_id !== promo.promotion_id
+                                    )
+                                  );
+                                } catch (error) {
+                                  console.error(
+                                    "Failed to delete promotion:",
+                                    error
+                                  );
+                                  alert("Gagal menghapus promosi");
+                                }
+                              }
+                            }}
+                            className="p-2 text-red-500 hover:text-red-700"
+                          >
+                            <FaTimes />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-500 text-center py-4">
+                    Belum ada promosi yang dibuat
+                  </p>
+                )}
               </div>
             </div>
           )}
@@ -617,14 +740,12 @@ export default function EventDetailPage() {
                 </div>
               </div>
               {user.isAuth && user.role === "CUSTOMER" && (
-                <>
-                  <button
-                    onClick={handleBuyTicket}
-                    className="w-full py-3 bg-customMediumBlue text-white rounded-md hover:bg-customDarkBlue"
-                  >
-                    Beli Tiket
-                  </button>
-                </>
+                <button
+                  onClick={handleBuyTicket}
+                  className="w-full py-3 bg-customMediumBlue text-white rounded-md hover:bg-customDarkBlue"
+                >
+                  Beli Tiket
+                </button>
               )}
             </div>
           ) : (
