@@ -753,7 +753,7 @@ export default function EventDetailPage() {
                   </div>
 
                   {review.userId ===
-                    parseInt(localStorage.getItem("userId") || "0") && ( //hardcoded userid 2
+                    parseInt(localStorage.getItem("userId") || "0") && (
                     <div className="ml-auto flex gap-2">
                       {user.isAuth && user.role === "CUSTOMER" && (
                         <>
