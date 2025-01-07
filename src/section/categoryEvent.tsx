@@ -18,17 +18,17 @@ const CATEGORIES: Category[] = [
   },
   {
     displayName: "Culinary",
-    dbTopic: "Makanan, Minuman",
+    dbTopic: "Kuliner",
     image: "/images/category/culinary.jpg",
   },
   {
     displayName: "Education",
-    dbTopic: "Pendidikan, Beasiswa",
+    dbTopic: "Pendidikan",
     image: "/images/category/edu.jpg",
   },
   {
     displayName: "Fashion",
-    dbTopic: "Fashion, Kecantikan",
+    dbTopic: "Fashion",
     image: "/images/category/fashion.jpg",
   },
   {
@@ -38,17 +38,17 @@ const CATEGORIES: Category[] = [
   },
   {
     displayName: "Sport",
-    dbTopic: "Olahraga",
+    dbTopic: "Sport",
     image: "/images/category/sport.jpg",
   },
   {
     displayName: "Tech",
-    dbTopic: "Tech, Start-Up",
+    dbTopic: "Teknologi",
     image: "/images/category/tech.jpg",
   },
   {
     displayName: "Travel",
-    dbTopic: "Wisata & Liburan",
+    dbTopic: "Travel",
     image: "/images/category/travel.jpg",
   },
 ];
