@@ -20,6 +20,7 @@ interface Transaction {
   createdAt: string;
   ticket: {
     ticketName: string;
+    eventId: number;
     event: {
       id: number;
       name: string;
@@ -153,10 +154,10 @@ export default function TicketSaya() {
                     </span>
                   </div>
                   <Link
-                    href={`/event/${transaction?.ticket?.event?.id}`}
+                    href={`/review/${transaction?.ticket?.eventId}`}
                     className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors text-center block"
                   >
-                    Write a Review
+                    Tulis Review
                   </Link>
                 </div>
               </div>
