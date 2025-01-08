@@ -55,7 +55,7 @@ const CATEGORIES: Category[] = [
 
 const CategoryEvent = () => {
   const router = useRouter();
-  const [availableTopics, setAvailableTopics] = useState<string[]>([]);
+  const [, setAvailableTopics] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchTopics = async () => {

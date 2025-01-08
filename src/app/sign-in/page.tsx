@@ -4,6 +4,7 @@
 import FormInput from "@/components/FormInput";
 import * as React from "react";
 import Image from "next/image";
+import { useState } from "react";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { Button } from "@/components/ui/button";
 import { setSignIn } from "@/lib/redux/features/userSlice";
@@ -11,11 +12,10 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { callAPI } from "@/config/axios";
 
-const signIn: React.FunctionComponent<any> = () => {
+const SignIn: React.FunctionComponent<any> = () => {
   const router = useRouter();
-  const [email, setEmail] = React.useState<string>("");
-  const [password, setPassword] = React.useState<string>("");
-
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const dispatch = useAppDispatch();
 
   const onSignIn = async () => {
@@ -98,4 +98,4 @@ const signIn: React.FunctionComponent<any> = () => {
   );
 };
 
-export default signIn;
+export default SignIn;
