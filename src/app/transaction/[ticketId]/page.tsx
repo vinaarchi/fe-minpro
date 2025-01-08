@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { FaUpload, FaCreditCard } from "react-icons/fa";
@@ -32,7 +32,7 @@ const BankAccounts: BankAccount[] = [
   { name: "Mandiri", number: "0987654321", holder: "PT Event Organizer" },
 ];
 
-export default function TransactionPage() {
+const Transaction = () => {
   const params = useParams();
   const router = useRouter();
   const [ticket, setTicket] = useState<Ticket | null>(null);
@@ -279,5 +279,13 @@ export default function TransactionPage() {
         </div>
       </div>
     </div>
+  );
+};
+
+export default function TransactionPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Transaction />
+    </Suspense>
   );
 }
