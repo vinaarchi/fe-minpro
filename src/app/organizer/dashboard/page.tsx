@@ -7,7 +7,7 @@ import AuthGuard from "@/guard/AuthGuard";
 import OrgSidebar from "@/components/OrgSideBar";
 import Image from "next/image";
 import axios from "axios";
-import { stat } from "fs";
+
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import {
   Bar,
@@ -108,7 +108,7 @@ const Dashboard = () => {
           `http://localhost:3232/tickets/total-customer/all-event/${userId}`
         );
         setTotalPerson(response.data.result);
-      } catch (error) {
+      } catch {
         console.log("Failed to fetch total Customer");
       }
     };
