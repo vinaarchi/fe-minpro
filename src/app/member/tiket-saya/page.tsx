@@ -20,6 +20,7 @@ interface DiscountCoupon {
   expirationDate: string;
 }
 
+
 interface PointsBalance {
   id: number;
   points: number;
@@ -48,9 +49,11 @@ interface Transaction {
 export default function TicketSaya() {
   const [tickets, setTickets] = useState<Transaction[]>([]);
   const [discountCoupons, setDiscountCoupons] = useState<DiscountCoupon[]>([]);
+
   const [points, setPoints] = useState<PointsBalance[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -60,7 +63,9 @@ export default function TicketSaya() {
     }
   }, []);
 
+
   // ini fungsi buat transaksi
+
   useEffect(() => {
     if (!userId) return;
 
@@ -76,12 +81,14 @@ export default function TicketSaya() {
         // );
         // console.log("ini dari frontend", pointBalance.data)
         // setPoints(pointBalance.data.result);
+
       } catch (err) {
         console.log("Failed to fetch tickets:", err);
       } finally {
         setLoading(false);
       }
     };
+
 
     fetchTickets();
   }, [userId]);
@@ -179,17 +186,20 @@ export default function TicketSaya() {
                             )}
                           </span>
                         </div>
+
                       </div>
                     </div>
                   </div>
                 </div>
               ))
             ) : (
+
               <p> You Don't Have Any Points Available</p>
             )}
           </div>
         </div>
         {/* ini bagian ticket */}
+
         <div>
           <h1 className="text-3xl font-bold mb-8">My Tickets</h1>
           {tickets.length === 0 ? (
