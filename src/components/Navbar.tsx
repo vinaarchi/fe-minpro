@@ -4,7 +4,6 @@ import * as React from "react";
 import Link from "next/link";
 import { FaSearch, FaCalendarAlt, FaCompass, FaBars } from "react-icons/fa";
 import { useState } from "react";
-import { LanguageContext } from "@/context/LanguageContext";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { callAPI } from "@/config/axios";
 import { setSignIn } from "@/lib/redux/features/userSlice";
@@ -19,7 +18,7 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 interface INavbarProps {}
 
-const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
+const Navbar: React.FunctionComponent<INavbarProps> = () => {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const user = useAppSelector((state) => state.userReducer);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
@@ -7,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { set } from "lodash";
 
 const ResetPassword: React.FunctionComponent = () => {
   const [newPassword, setNewPassword] = useState<string>("");

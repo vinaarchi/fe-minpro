@@ -22,7 +22,7 @@ interface FormValue {
   referralCode: string;
 }
 
-const signUp: React.FunctionComponent<ISignUpPageProps> = (props) => {
+const signUp: React.FunctionComponent<ISignUpPageProps> = () => {
   const onSignUp = async (values: FormValue) => {
     console.log("Values being sent", values);
     try {

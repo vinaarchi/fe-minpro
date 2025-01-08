@@ -2,9 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { FaCalendar, FaRegMoneyBillAlt, FaChartLine } from "react-icons/fa";
-import { AiOutlineUser } from "react-icons/ai";
 import AuthGuard from "@/guard/AuthGuard";
 import OrgSidebar from "@/components/OrgSideBar";
 import Image from "next/image";

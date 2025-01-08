@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -156,7 +157,7 @@ export default function EditEventPage() {
         image: imageUrl,
       };
 
-      const response = await axios.patch(
+      await axios.patch(
         `http://localhost:3232/events/${id}`,
         updateData
       );

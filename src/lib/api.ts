@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { callAPI } from "@/config/axios";
 
 export const switchRoleApi = async (
@@ -9,7 +10,7 @@ export const switchRoleApi = async (
       role: newRole,
     });
     return response;
-  } catch (error) {
-    throw new Error("Failed to switch role");
+  } catch (error:any) {
+    throw new Error("Failed to switch role", error);
   }
 };
