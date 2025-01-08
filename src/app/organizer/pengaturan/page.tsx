@@ -1,6 +1,5 @@
 "use client";
 
-import OrganizerSettings from "@/components/OrganizerSettings";
 import OrgSidebar from "@/components/OrgSideBar";
 import AuthGuard from "@/guard/AuthGuard";
 import * as React from "react";
