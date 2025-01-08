@@ -17,7 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuArrow,
 } from "@radix-ui/react-dropdown-menu";
-
+import AuthGuard from "@/guard/AuthGuard";
 
 const Navbar: React.FunctionComponent<any> = () => {
   const router = useRouter();
@@ -124,7 +124,7 @@ const Navbar: React.FunctionComponent<any> = () => {
         <div className="hidden sm:flex items-center space-x-4 z-10">
           {/* ini menu berdasarkan rolenya nnti */}
           {user.isAuth && user.role === "ORGANIZER" && (
-            <>
+            <AuthGuard allowedRoles={["ORGANIZER"]}>
               <Link
                 href="/create-event"
                 className="text-white flex items-center space-x-2 hover:underline"
@@ -140,11 +140,11 @@ const Navbar: React.FunctionComponent<any> = () => {
                 <FaCompass className="w-5 h-5 text-white" />
                 <span>Jelajah</span>
               </Link>
-            </>
+            </AuthGuard>
           )}
 
           {user.isAuth && user.role === "CUSTOMER" && (
-            <>
+            <AuthGuard allowedRoles={["CUSTOMER"]}>
               <Link
                 href="/member/tiket-saya"
                 className="text-white flex items-center space-x-2 hover:underline"
@@ -159,7 +159,7 @@ const Navbar: React.FunctionComponent<any> = () => {
                 <FaCompass className="w-5 h-5 text-white" />
                 <span>Jelajah</span>
               </Link>
-            </>
+            </AuthGuard>
           )}
 
           <ul>
@@ -175,7 +175,7 @@ const Navbar: React.FunctionComponent<any> = () => {
                     <DropdownMenuArrow />
 
                     {user.isAuth && user.role === "ORGANIZER" && (
-                      <>
+                      <AuthGuard allowedRoles={["ORGANIZER"]}>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/organizer/dashboard">Dashboard</Link>
                         </DropdownMenuItem>
@@ -190,13 +190,13 @@ const Navbar: React.FunctionComponent<any> = () => {
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/organizer/pengaturan">Pengaturan</Link>
                         </DropdownMenuItem>
-                      </>
+                      </AuthGuard>
                     )}
 
                     {/* ini buat role customer dropdown */}
 
                     {user.isAuth && user.role === "CUSTOMER" && (
-                      <>
+                      <AuthGuard allowedRoles={["CUSTOMER"]}>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/explore-events">Jelajah</Link>
                         </DropdownMenuItem>
@@ -211,7 +211,7 @@ const Navbar: React.FunctionComponent<any> = () => {
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/member/pengaturan">Pengaturan</Link>
                         </DropdownMenuItem>
-                      </>
+                      </AuthGuard>
                     )}
 
                     <DropdownMenuItem className="p-2 rounded-md text-xs font-bold text-customOrange">
