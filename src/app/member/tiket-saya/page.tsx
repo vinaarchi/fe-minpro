@@ -12,13 +12,6 @@ import {
 } from "react-icons/fa";
 import AuthGuard from "@/guard/AuthGuard";
 
-interface DiscountCoupon {
-  id: number;
-  code: string;
-  discount: number;
-  expirationDate: string;
-}
-
 interface Transaction {
   id: number;
   ticketId: number;
