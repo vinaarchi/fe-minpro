@@ -40,7 +40,6 @@ interface Transaction {
 
 export default function TicketSaya() {
   const [tickets, setTickets] = useState<Transaction[]>([]);
-  const [discountCoupons, setDiscountCoupons] = useState<DiscountCoupon[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [userId, setUserId] = useState<string | null>(null);

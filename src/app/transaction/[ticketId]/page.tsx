@@ -50,7 +50,7 @@ const Transaction = () => {
   const [discount, setDiscount] = useState(0);
   const [finalPrice, setFinalPrice] = useState(0);
   const [discountCode, setDiscountCode] = useState<string>("");
-  const [discountCoupons, setDiscountCoupons] = useState<DiscountCoupon[]>([]);
+
 
   useEffect(() => {
     const fetchTicket = async () => {
