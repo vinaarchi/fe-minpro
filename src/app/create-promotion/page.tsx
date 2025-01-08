@@ -145,11 +145,9 @@ const PromotionForm = () => {
 
 export default function CreatePromotion() {
   return (
-    <div className="max-w-2xl mx-auto my-8 p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6">Buat Kode Promosi</h1>
+
       <Suspense fallback={<div>Loading...</div>}>
         <PromotionForm />
       </Suspense>
-    </div>
-  );
+);
 }
