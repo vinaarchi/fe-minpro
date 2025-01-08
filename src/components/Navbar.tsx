@@ -17,7 +17,6 @@ import {
   DropdownMenuItem,
   DropdownMenuArrow,
 } from "@radix-ui/react-dropdown-menu";
-import AuthGuard from "@/guard/AuthGuard";
 
 const Navbar: React.FunctionComponent<any> = () => {
   const router = useRouter();

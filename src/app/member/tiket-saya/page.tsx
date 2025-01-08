@@ -63,12 +63,6 @@ export default function TicketSaya() {
           `http://localhost:3232/transactions/user/${userId}`
         );
         setTickets(response.data);
-
-        // const pointBalance = await axios.get(
-        //   `http://localhost:3232/user/${userId}/total-points`
-        // );
-        // console.log("ini dari frontend", pointBalance.data)
-        // setPoints(pointBalance.data.result);
       } catch (err) {
         console.log("Failed to fetch tickets:", err);
       } finally {
@@ -78,23 +72,6 @@ export default function TicketSaya() {
 
     fetchTickets();
   }, [userId]);
-
-  //ini buat discountnya
-  useEffect(() => {
-    const fetchCoupon = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3232/user/${userId}/discount-coupon`
-        );
-        setDiscountCoupons(response.data.result);
-      } catch (error) {
-        console.log("Failed to fetch Discount", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCoupon();
-  }, []);
 
   if (loading) {
     return (
@@ -107,42 +84,6 @@ export default function TicketSaya() {
   return (
     <AuthGuard allowedRoles={["CUSTOMER"]}>
       <div className="max-w-7xl mx-auto p-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-8">Coupon Available</h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {discountCoupons.length > 0 ? (
-              discountCoupons.map((coupon) => (
-                <div
-                  key={coupon.id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
-                >
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-2">
-                      Coupon Code: {coupon.code}
-                    </h3>
-                    <p> Discount: {coupon.discount}%</p>
-
-                    <div className="space-y-2 text-gray-600">
-                      <div className="flex items-center">
-                        <FaCalendar className="mr-2" />
-                        <span>
-                          Expiration Date:{" "}
-                          {format(
-                            new Date(coupon.expirationDate),
-                            "dd MMMM yyyy"
-                          )}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>No Active Discount Coupon Available</p>
-            )}
-          </div>
-        </div>
-
         {/* ini bagian ticket */}
 
         <div>
