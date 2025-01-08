@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 
-export default function CreatePromotion() {
+// export default function CreatePromotion() {
+const PromotionForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const eventId = searchParams.get("eventId");
@@ -138,6 +139,17 @@ export default function CreatePromotion() {
           </button>
         </div>
       </form>
+    </div>
+  );
+};
+
+export default function CreatePromotion() {
+  return (
+    <div className="max-w-2xl mx-auto my-8 p-6 bg-white rounded-lg shadow-md">
+      <h1 className="text-2xl font-bold mb-6">Buat Kode Promosi</h1>
+      <Suspense fallback={<div>Loading...</div>}>
+        <PromotionForm />
+      </Suspense>
     </div>
   );
 }
