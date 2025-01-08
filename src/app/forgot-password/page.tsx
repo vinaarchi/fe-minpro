@@ -12,7 +12,7 @@ import Image from "next/image";
 const ForgotPassword: React.FunctionComponent = () => {
   const [email, setEmail] = useState<string>("");
   const [message, setMessage] = useState<string>("");
-  const router = useRouter();
+  // const router = useRouter();
 
   const onForgotPassword = async () => {
     try {

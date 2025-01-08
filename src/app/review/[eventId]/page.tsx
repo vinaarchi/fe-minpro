@@ -52,7 +52,7 @@ export default function ReviewPage({ params }: PageProps) {
           return;
         }
         setEvent(data);
-      } catch (err) {
+      } catch {
         setError("Gagal menampilkan detail event");
       } finally {
         setLoading(false);

@@ -19,12 +19,6 @@ interface DiscountCoupon {
   expirationDate: string;
 }
 
-interface PointsBalance {
-  id: number;
-  points: number;
-  expirationDate: string;
-}
-
 interface Transaction {
   id: number;
   ticketId: number;

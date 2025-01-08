@@ -3,7 +3,6 @@
 
 import FormInput from "@/components/FormInput";
 import * as React from "react";
-
 import Image from "next/image";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { Button } from "@/components/ui/button";
@@ -12,9 +11,7 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { callAPI } from "@/config/axios";
 
-interface ISignInPageProps {}
-
-const signIn: React.FunctionComponent<ISignInPageProps> = (props) => {
+const signIn: React.FunctionComponent<any> = () => {
   const router = useRouter();
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");

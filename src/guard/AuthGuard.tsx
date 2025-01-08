@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
 import * as React from "react";
-import { useEffect, ReactNode, useState } from "react";
+import { useEffect, ReactNode } from "react";
 
 type Role = "CUSTOMER" | "ORGANIZER";
 

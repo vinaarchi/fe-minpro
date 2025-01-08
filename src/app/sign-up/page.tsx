@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Image from "next/image";
@@ -10,7 +11,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { callAPI } from "@/config/axios";
 import { SignUpSchema } from "./SignUpSchema";
 
-interface ISignUpPageProps {}
 interface FormValue {
   fullname: string;
   username: string;
@@ -22,7 +22,7 @@ interface FormValue {
   referralCode: string;
 }
 
-const signUp: React.FunctionComponent<ISignUpPageProps> = () => {
+const signUp: React.FunctionComponent<any> = () => {
   const onSignUp = async (values: FormValue) => {
     console.log("Values being sent", values);
     try {
@@ -77,7 +77,7 @@ const signUp: React.FunctionComponent<ISignUpPageProps> = () => {
                   }}
                 >
                   {(props: FormikProps<FormValue>) => {
-                    const { values, handleChange, errors, touched } = props;
+                    const { values, handleChange, errors } = props;
                     console.log("error formik", errors);
 
                     return (

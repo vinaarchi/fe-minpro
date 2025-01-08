@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
@@ -16,9 +17,9 @@ import {
   DropdownMenuItem,
   DropdownMenuArrow,
 } from "@radix-ui/react-dropdown-menu";
-interface INavbarProps {}
 
-const Navbar: React.FunctionComponent<INavbarProps> = () => {
+
+const Navbar: React.FunctionComponent<any> = () => {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const user = useAppSelector((state) => state.userReducer);

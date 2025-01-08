@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useSearchParams } from "next/navigation";
@@ -5,9 +6,9 @@ import * as React from "react";
 import { callAPI } from "@/config/axios";
 import Image from "next/image";
 
-interface IVerifyProps {}
 
-const Verify: React.FunctionComponent<IVerifyProps> = (props) => {
+
+const Verify: React.FunctionComponent<any> = () => {
   const queryParams = useSearchParams();
   const handleVerified = async () => {
     try {

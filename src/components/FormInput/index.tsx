@@ -15,7 +15,6 @@ interface IFormInput {
 }
 
 const FormInput: React.FC<IFormInput> = ({
-  id,
   type,
   name,
   label,
