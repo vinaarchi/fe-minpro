@@ -5,6 +5,7 @@ import { Suspense, useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { FaUpload, FaCreditCard } from "react-icons/fa";
+import { callAPI } from "@/config/axios";
 
 interface Ticket {
   ticket_id: number;
@@ -12,6 +13,12 @@ interface Ticket {
   ticketName: string;
   available: number;
   description: string;
+}
+
+interface DiscountCoupon {
+  code: string;
+  discount: number;
+  expirationDate: string;
 }
 
 interface BankAccount {
@@ -42,6 +49,8 @@ const Transaction = () => {
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [finalPrice, setFinalPrice] = useState(0);
+  const [discountCode, setDiscountCode] = useState<string>("");
+
 
   useEffect(() => {
     const fetchTicket = async () => {
@@ -98,6 +107,35 @@ const Transaction = () => {
     } catch (err) {
       console.error("Invalid promo code:", err);
     }
+  };
+
+  const fetchDiscountCoupons = async () => {
+    const userId = localStorage.getItem("userId");
+    try {
+      const response = await callAPI.get(`/user/${userId}/discount-coupon`);
+      console.log("RESPONSE GET DISKON KUPON", response);
+      const kupon = response.data.result[0].code;
+      console.log("INI KUPON", kupon);
+      setDiscountCode(kupon);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    try {
+      fetchDiscountCoupons();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  const handleCouponClick = (coupon: DiscountCoupon) => {
+    if (!ticket) return;
+    // ketika di klik akan mempengaruhi hasil akhirnya
+    const discountAmount = ticket.price * (coupon.discount / 100);
+    setDiscount(discountAmount);
+    setFinalPrice(ticket.price - discountAmount);
   };
 
   const handleSubmit = async () => {
@@ -276,6 +314,15 @@ const Transaction = () => {
               Selesaikan Pembayaran
             </button>
           </div>
+        </div>
+
+        {/* ini untuk diskon kuponnya */}
+        <div className="mt-6 border-2 border-gray-300 p-4 rounded-lg text-center cursor-pointer shadow-md hover:shadow-lg "
+        onClick={() => handleCouponClick({ code: discountCode, discount: 10, expirationDate: ""})}
+        >
+          <h3 className="font-semibold">Gunakan Kode Diskon User</h3>
+          <p className="text-lg font-semibold text-blue-500">{discountCode}</p>
+          <div></div>
         </div>
       </div>
     </div>
