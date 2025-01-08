@@ -174,7 +174,6 @@ const Navbar: React.FunctionComponent<any> = () => {
                   <DropdownMenuContent className="absolute-[100%] text-white bg-customDarkBlue rounded-md text-center">
                     <DropdownMenuArrow />
 
-                    {user.isAuth && user.role === "ORGANIZER" && (
                       <AuthGuard allowedRoles={["ORGANIZER"]}>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/organizer/dashboard">Dashboard</Link>
@@ -191,7 +190,7 @@ const Navbar: React.FunctionComponent<any> = () => {
                           <Link href="/organizer/pengaturan">Pengaturan</Link>
                         </DropdownMenuItem>
                       </AuthGuard>
-                    )}
+                    
 
                     {/* ini buat role customer dropdown */}
 
