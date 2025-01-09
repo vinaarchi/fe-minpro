@@ -4,7 +4,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { FaSearch, FaCalendarAlt, FaCompass, FaBars } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { callAPI } from "@/config/axios";
 import { setSignIn } from "@/lib/redux/features/userSlice";
@@ -21,9 +21,9 @@ import {
 const Navbar: React.FunctionComponent<any> = () => {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const user = useAppSelector((state) => state.userReducer);
-
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedTerm, setDebouncedTerm] = useState(searchQuery);
+  const user = useAppSelector((state) => state.userReducer);
 
   const dispatch = useAppDispatch();
   const toggleMobileMenu = () => {
@@ -38,16 +38,36 @@ const Navbar: React.FunctionComponent<any> = () => {
   };
 
   //search
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
-    }
-  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedTerm(searchQuery);
+    }, 500);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (debouncedTerm.trim()) {
+      router.push(`/search?q=${encodeURIComponent(debouncedTerm)}`);
+    }
+  }, [debouncedTerm, router]);
+
+  const handleSearch = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      if (searchQuery.trim()) {
+        router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      }
+    },
+    [searchQuery, router]
+  );
+
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(e.target.value);
+    },
+    []
+  );
 
   const keepLogin = async () => {
     try {
