@@ -18,11 +18,11 @@ const OrgSidebar = () => {
       <AuthGuard allowedRoles={["ORGANIZER"]}>
         <ul className="text-white font-serif space-y-5 text-center text-xl pt-10">
           <li>
-            <Link href="/member/dashboard">Dashboard</Link>
+            <Link href="/organizer/dashboard">Dashboard</Link>
           </li>
-          <li>
+          {/* <li>
             <Link href="/member/event-list">Event Saya</Link>
-          </li>
+          </li> */}
           <li>
             <Link href="/organizer/informasi-dasar">Informasi Dasar</Link>
           </li>
