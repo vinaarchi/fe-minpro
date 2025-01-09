@@ -25,6 +25,7 @@ const SignIn: React.FunctionComponent<any> = () => {
       dispatch(setSignIn({ ...response.data, isAuth: true }));
       localStorage.setItem("tkn", response.data.token);
       localStorage.setItem("userId", response.data.id);
+      console.log("ini id dari frontend", response.data);
 
       router.replace("/");
     } catch (error) {
