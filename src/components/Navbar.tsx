@@ -20,6 +20,7 @@ import {
 import NavbarOrganizer from "./OrganizerNavbar";
 import NavbarCustomer from "./CustomerNavbar";
 
+
 const Navbar: React.FunctionComponent<any> = () => {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
