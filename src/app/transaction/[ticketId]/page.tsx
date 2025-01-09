@@ -21,11 +21,17 @@ interface DiscountCoupon {
   expirationDate: string;
 }
 
+interface PointBalance {
+  point: number;
+  expirationDate: string
+}
+
 interface BankAccount {
   name: string;
   number: string;
   holder: string;
 }
+
 interface TransactionPayload {
   ticketId: number;
   userId: number;
@@ -50,7 +56,7 @@ const Transaction = () => {
   const [discount, setDiscount] = useState(0);
   const [finalPrice, setFinalPrice] = useState(0);
   const [discountCode, setDiscountCode] = useState<string>("");
-
+  const [points, setPointsBalance] = useState<number>();
 
   useEffect(() => {
     const fetchTicket = async () => {
@@ -136,6 +142,37 @@ const Transaction = () => {
     const discountAmount = ticket.price * (coupon.discount / 100);
     setDiscount(discountAmount);
     setFinalPrice(ticket.price - discountAmount);
+  };
+
+  const fetchPointDiscount = async () => {
+    const userId = localStorage.getItem("userId");
+    try {
+      const response = await callAPI.get(`/user/${userId}/total-points`);
+      console.log("ini dari userIdnya", userId);
+      console.log("RESPONSE GET POINT DISKON", response);
+      const point = response.data.result;
+      console.log("ini points", point);
+      setPointsBalance(point);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    try {
+      fetchPointDiscount();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  const handlePointClick = (point: PointBalance) => {
+    if (!ticket) return;
+
+    //ketika di klik akan mempengaruhi hasil akhirnya
+    const pointsAmount = point.point;
+    setPointsBalance(pointsAmount);
+    setFinalPrice(ticket.price - pointsAmount);
   };
 
   const handleSubmit = async () => {
@@ -317,12 +354,32 @@ const Transaction = () => {
         </div>
 
         {/* ini untuk diskon kuponnya */}
-        <div className="mt-6 border-2 border-gray-300 p-4 rounded-lg text-center cursor-pointer shadow-md hover:shadow-lg "
-        onClick={() => handleCouponClick({ code: discountCode, discount: 10, expirationDate: ""})}
-        >
-          <h3 className="font-semibold">Gunakan Kode Diskon User</h3>
-          <p className="text-lg font-semibold text-blue-500">{discountCode}</p>
-          <div></div>
+        <div className="flex space-x-4">
+          <div
+            className="mt-6 w-96 border-2 border-gray-300 p-4 rounded-lg text-center cursor-pointer shadow-md hover:shadow-lg "
+            onClick={() =>
+              handleCouponClick({
+                code: discountCode,
+                discount: 10,
+                expirationDate: "",
+              })
+            }
+          >
+            <h3 className="font-semibold">Gunakan Kode Diskon User</h3>
+            <p className="text-lg font-semibold text-blue-500">
+              {discountCode}
+            </p>
+            <div></div>
+          </div>
+          <div className="mt-6 w-96 border-2 border-gray-300 p-4 rounded-lg text-center cursor-pointer shadow-md hover:shadow-lg"
+          onClick={() => handlePointClick({
+            point : Number(points),
+            expirationDate: ""
+
+          })}>
+            <h3 className="font-semibold">Use Points</h3>
+            <p className="text-lg font-semibold text-blue-500">{points}</p>
+          </div>
         </div>
       </div>
     </div>

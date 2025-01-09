@@ -102,7 +102,7 @@ const Navbar: React.FunctionComponent<any> = () => {
           <Link href="/">Eventra</Link>
         </div>
         <div className="hidden sm:flex sm:ml-auto space-x-4">
-          <Link href="/about" className="text-white hover:underline">
+          <Link href="/tentang" className="text-white hover:underline">
             Tentang Eventra
           </Link>
           {/* <Link href="/create-event" className="text-white hover:underline">
