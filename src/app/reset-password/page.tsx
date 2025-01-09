@@ -1,15 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { callAPI } from "@/config/axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { set } from "lodash";
 
-const ResetPassword: React.FunctionComponent = () => {
+const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [message, setMessage] = useState<string>("");
@@ -96,4 +96,10 @@ const ResetPassword: React.FunctionComponent = () => {
   );
 };
 
-export default ResetPassword;
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPassword />
+    </Suspense>
+  );
+}

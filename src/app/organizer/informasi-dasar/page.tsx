@@ -9,7 +9,7 @@ const OrganizerEditProfilePage: React.FC = () => {
   return (
     <div>
       <AuthGuard allowedRoles={["ORGANIZER"]}>
-        '
+        
         <div className="flex">
           <OrgSidebar />
           <div>

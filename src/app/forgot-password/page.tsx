@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
 import { useState } from "react";
 import { callAPI } from "@/config/axios";
-import { useRouter } from "next/navigation";
 import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -11,7 +11,7 @@ import Image from "next/image";
 const ForgotPassword: React.FunctionComponent = () => {
   const [email, setEmail] = useState<string>("");
   const [message, setMessage] = useState<string>("");
-  const router = useRouter();
+  // const router = useRouter();
 
   const onForgotPassword = async () => {
     try {

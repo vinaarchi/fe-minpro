@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
+
 import Image from "next/image";
 
 type Event = {
@@ -17,7 +18,8 @@ type Event = {
   };
 };
 
-const EventsPage = () => {
+// const EventsPage = () => {
+const EventList = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [events, setEvents] = useState<Event[]>([]);
@@ -147,4 +149,10 @@ const EventsPage = () => {
   );
 };
 
-export default EventsPage;
+export default function EventsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EventList />
+    </Suspense>
+  );
+}

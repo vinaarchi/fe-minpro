@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -42,7 +43,7 @@ export default function ReviewPage({ params }: PageProps) {
         const response = await fetch(`http://localhost:3232/events/${eventId}`);
         if (!response.ok) throw new Error("Event not found");
         const data = await response.json();
-        //ini
+
         const eventDate = new Date(data.date);
         const now = new Date();
 
@@ -51,7 +52,7 @@ export default function ReviewPage({ params }: PageProps) {
           setLoading(false);
           return;
         }
-        //
+
         setEvent(data);
       } catch {
         setError("Gagal menampilkan detail event");
@@ -90,7 +91,7 @@ export default function ReviewPage({ params }: PageProps) {
         const data = await response.json();
         throw new Error(data.error);
       }
-      //ini
+
       router.push(`/event/${eventId}`);
     } catch (err: any) {
       setError(err.message);
@@ -104,7 +105,7 @@ export default function ReviewPage({ params }: PageProps) {
       </div>
     );
   }
-  //ini
+
   if (error) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -118,7 +119,7 @@ export default function ReviewPage({ params }: PageProps) {
       </div>
     );
   }
-  //
+
   if (!event) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">

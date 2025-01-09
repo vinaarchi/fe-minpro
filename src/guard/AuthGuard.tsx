@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
 import * as React from "react";
-import { useEffect, ReactNode, useState } from "react";
+import { useEffect, ReactNode } from "react";
 
 type Role = "CUSTOMER" | "ORGANIZER";
 
@@ -19,7 +19,6 @@ const AuthGuard: React.FunctionComponent<IAuthGuardProps> = ({
   //ngambil data user dari redux
   const userData = useAppSelector((state) => state.userReducer);
 
-  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     if (!userData) {
       return; // tunggu sampe data user dimuat
@@ -31,10 +30,6 @@ const AuthGuard: React.FunctionComponent<IAuthGuardProps> = ({
       return;
     }
   }, [userData, allowedRoles]);
-
-  if (loading) {
-    return <div>Loading...</div>; // Atau spinner/komponen loading lainnya
-  }
 
   return <>{children}</>;
 };

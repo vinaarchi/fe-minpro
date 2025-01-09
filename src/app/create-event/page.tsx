@@ -35,7 +35,6 @@ function EventCreationPage() {
 
   const [eventName, setEventName] = useState("");
   const [eventDescription, setEventDescription] = useState("");
-  const [eventLocation, setEventLocation] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [eventTime, setEventTime] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");

@@ -1,14 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Formik, Field, Form } from "formik";
-import * as Yup from "yup";
 import { customerValidationSchema } from "./customerValidationSchema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { callAPI } from "@/config/axios";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { setUpdateProfile } from "@/lib/redux/features/userSlice";

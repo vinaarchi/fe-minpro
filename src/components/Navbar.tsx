@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
 import Link from "next/link";
 import { FaSearch, FaCalendarAlt, FaCompass, FaBars } from "react-icons/fa";
 import { useState, useEffect, useCallback } from "react";
-import { LanguageContext } from "@/context/LanguageContext";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { callAPI } from "@/config/axios";
 import { setSignIn } from "@/lib/redux/features/userSlice";
@@ -17,9 +17,8 @@ import {
   DropdownMenuItem,
   DropdownMenuArrow,
 } from "@radix-ui/react-dropdown-menu";
-interface INavbarProps {}
 
-const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
+const Navbar: React.FunctionComponent<any> = () => {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const user = useAppSelector((state) => state.userReducer);
@@ -107,8 +106,8 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
             Tentang Eventra
           </Link>
           {/* <Link href="/create-event" className="text-white hover:underline">
-            Mulai Jadi Event Creator
-          </Link> */}
+          Mulai Jadi Event Creator
+        </Link> */}
           <Link href="/prices" className="text-white hover:underline">
             Biaya
           </Link>

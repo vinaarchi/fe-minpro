@@ -1,16 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { FaCalendar, FaRegMoneyBillAlt, FaChartLine } from "react-icons/fa";
-import { AiOutlineUser } from "react-icons/ai";
 import AuthGuard from "@/guard/AuthGuard";
 import OrgSidebar from "@/components/OrgSideBar";
 import Image from "next/image";
-
 import axios from "axios";
-import { stat } from "fs";
+
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import {
   Bar,
@@ -28,8 +25,6 @@ const Dashboard = () => {
   const [ticketSold, setTicketSold] = useState<number>(0);
   const [totalPerson, setTotalPerson] = useState<number>(0);
   const [monthlyStats, setMonthlyStats] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
 
   //ini buat total event yang telah dibuat
   useEffect(() => {
@@ -37,10 +32,9 @@ const Dashboard = () => {
       const userId = localStorage.getItem("userId");
 
       if (!userId) {
-        setError("User ID is not found");
+        console.log("User ID is not found");
         return;
       }
-      setLoading(true);
 
       try {
         const response = await axios.get(
@@ -48,9 +42,7 @@ const Dashboard = () => {
         );
         setEventCount(response.data.result);
       } catch (error) {
-        setError("Failed to fetch total events");
-      } finally {
-        setLoading(false);
+        console.log("Failed to fetch total events", error);
       }
     };
 
@@ -63,10 +55,9 @@ const Dashboard = () => {
       const userId = localStorage.getItem("userId");
 
       if (!userId) {
-        setError("User ID is not found");
+        console.log("User ID is not found");
         return;
       }
-      setLoading(true);
 
       try {
         const response = await axios.get(
@@ -74,9 +65,7 @@ const Dashboard = () => {
         );
         setTransactionCount(response.data.result);
       } catch (error) {
-        setError("Failed to fetch total Transaction");
-      } finally {
-        setLoading(false);
+        console.log("Failed to fetch total Transaction", error);
       }
     };
     totalTransaction();
@@ -88,10 +77,9 @@ const Dashboard = () => {
       const userId = localStorage.getItem("userId");
 
       if (!userId) {
-        setError("User ID is not found");
+        console.log("User ID is not found");
         return;
       }
-      setLoading(true);
 
       try {
         const response = await axios.get(
@@ -99,9 +87,7 @@ const Dashboard = () => {
         );
         setTicketSold(response.data.result);
       } catch (error) {
-        setError("Failed to fetch total Tickets");
-      } finally {
-        setLoading(false);
+        console.log("Failed to fetch total Tickets", error);
       }
     };
     totalTickets();
@@ -113,20 +99,17 @@ const Dashboard = () => {
       const userId = localStorage.getItem("userId");
 
       if (!userId) {
-        setError("User ID is not found");
+        console.log("User ID is not found");
         return;
       }
-      setLoading(true);
 
       try {
         const response = await axios.get(
           `http://localhost:3232/tickets/total-customer/all-event/${userId}`
         );
         setTotalPerson(response.data.result);
-      } catch (error) {
-        setError("Failed to fetch total Customer");
-      } finally {
-        setLoading(false);
+      } catch {
+        console.log("Failed to fetch total Customer");
       }
     };
     totalCustomer();
@@ -176,7 +159,6 @@ const Dashboard = () => {
     },
   } satisfies ChartConfig;
 
-
   return (
     <AuthGuard allowedRoles={["ORGANIZER"]}>
       <div>
@@ -204,9 +186,7 @@ const Dashboard = () => {
                       <hr />
                       <CardContent className="p-4">
                         <div className="text-2xl">
-
                           <label>{eventCount} Event</label>
-
                         </div>
                       </CardContent>
                     </CardHeader>
@@ -257,7 +237,6 @@ const Dashboard = () => {
             </div>
             <div className="pt-10">
               <div className=" font-ibrand text-5xl">
-
                 <h1>Pendapatan & Tiket Terjual</h1>
                 <div className="overflow-hidden mt-10">
                   <ChartContainer
@@ -295,19 +274,18 @@ const Dashboard = () => {
                         fill={chartConfig.earnings.color}
                         radius={4}
                         barSize={40}
-                     stackId="a"
+                        stackId="a"
                       />
                       <Bar
                         dataKey="ticketsSold"
                         fill={chartConfig.ticketsSold.color}
                         radius={4}
                         barSize={40}
-                      stackId="b"
+                        stackId="b"
                       />
                     </BarChart>
                   </ChartContainer>
                 </div>
-
               </div>
             </div>
           </div>

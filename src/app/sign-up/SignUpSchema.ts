@@ -1,4 +1,3 @@
-import { imageConfigDefault } from "next/dist/shared/lib/image-config";
 import * as Yup from "yup";
 
 export const SignUpSchema = Yup.object().shape({

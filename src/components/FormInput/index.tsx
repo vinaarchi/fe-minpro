@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
@@ -14,7 +15,6 @@ interface IFormInput {
 }
 
 const FormInput: React.FC<IFormInput> = ({
-  id,
   type,
   name,
   label,

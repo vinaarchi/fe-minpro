@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, ChangeEvent, FormEvent, Suspense } from "react";
+
 import axios from "axios";
 import {
   Ticket,
@@ -30,7 +32,7 @@ interface TicketData {
   contactNumber: string;
 }
 
-// export default function CreateTicketPage
+
 const TicketForm = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -366,6 +368,7 @@ const TicketForm = () => {
     </div>
   );
 };
+
 export default function CreateTicketPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>

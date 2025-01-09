@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { callAPI } from "@/config/axios";
 import { FaMapMarkerAlt, FaCalendarAlt, FaClock } from "react-icons/fa";
@@ -15,7 +15,7 @@ interface Event {
   image?: string | null;
 }
 
-const SearchPage = () => {
+const Search = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const query = searchParams.get("q");
@@ -106,4 +106,10 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage;
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Search />
+    </Suspense>
+  );
+}

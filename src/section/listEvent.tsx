@@ -1,13 +1,11 @@
 "use client";
 
 import * as React from "react";
-import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Image from "next/image";
 import CardBody from "react-bootstrap/esm/CardBody";
 import CardTitle from "react-bootstrap/esm/CardTitle";
 import CardText from "react-bootstrap/esm/CardText";
-import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 interface Event {

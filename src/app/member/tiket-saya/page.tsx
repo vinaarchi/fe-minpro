@@ -11,14 +11,6 @@ import {
   FaTicketAlt,
 } from "react-icons/fa";
 import AuthGuard from "@/guard/AuthGuard";
-import { Card, CardHeader } from "@/components/ui/card";
-
-interface DiscountCoupon {
-  id: number;
-  code: string;
-  discount: number;
-  expirationDate: string;
-}
 
 interface Transaction {
   id: number;
@@ -41,8 +33,8 @@ interface Transaction {
 
 export default function TicketSaya() {
   const [tickets, setTickets] = useState<Transaction[]>([]);
-  const [discountCoupons, setDiscountCoupons] = useState<DiscountCoupon[]>([]);
   const [loading, setLoading] = useState(true);
+
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -51,6 +43,8 @@ export default function TicketSaya() {
       setUserId(storedUserId);
     }
   }, []);
+
+  // ini fungsi buat transaksi
 
   useEffect(() => {
     if (!userId) return;
@@ -61,11 +55,6 @@ export default function TicketSaya() {
           `http://localhost:3232/transactions/user/${userId}`
         );
         setTickets(response.data);
-
-        const couponResponse = await axios.get(
-          `http://localhost:3232/user/${userId}/discount-coupon`
-        );
-        setDiscountCoupons(couponResponse.data.result);
       } catch (err) {
         console.log("Failed to fetch tickets:", err);
       } finally {
@@ -87,41 +76,7 @@ export default function TicketSaya() {
   return (
     <AuthGuard allowedRoles={["CUSTOMER"]}>
       <div className="max-w-7xl mx-auto p-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-8">Coupon Available</h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {discountCoupons.length > 0 ? (
-              discountCoupons.map((coupon) => (
-                <div
-                  key={coupon.id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
-                >
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-2">
-                      Coupon Code: {coupon.code}
-                    </h3>
-                    <p> Discount: {coupon.discount}%</p>
-
-                    <div className="space-y-2 text-gray-600">
-                      <div className="flex items-center">
-                        <FaCalendar className="mr-2" />
-                        <span>
-                          Expiration Date:{" "}
-                          {format(
-                            new Date(coupon.expirationDate),
-                            "dd MMMM yyyy"
-                          )}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>No Active Discount Coupon Available</p>
-            )}
-          </div>
-        </div>
+        {/* ini bagian ticket */}
 
         <div>
           <h1 className="text-3xl font-bold mb-8">My Tickets</h1>
@@ -132,7 +87,7 @@ export default function TicketSaya() {
                 No Tickets Found
               </h2>
               <p className="text-gray-500 mb-4">
-                You haven't purchased any tickets yet.
+                You haven&apos;t purchased any tickets yet.
               </p>
               <Link
                 href="/"
