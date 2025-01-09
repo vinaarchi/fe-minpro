@@ -93,11 +93,11 @@ export default function EventDetailPage() {
   >("description");
   const [selectedTicket, setSelectedTicket] = useState<TicketData | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [newReview, setNewReview] = useState({
-    rating: 0,
-    comment: "",
-  });
-  const [hoveredStar, setHoveredStar] = useState(0);
+  // const [newReview, setNewReview] = useState({
+  //   rating: 0,
+  //   comment: "",
+  // });
+  
   const [editingReview, setEditingReview] = useState<number | null>(null);
   const [editForm, setEditForm] = useState({
     rating: 0,
@@ -291,26 +291,26 @@ export default function EventDetailPage() {
     }
   };
 
-  const handleSubmitReview = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const userId = localStorage.getItem("userId");
-      console.log("Submitting review with userId:", userId);
-      console.log("Full review data:", {
-        ...newReview,
-        userId: parseInt(userId || "0"),
-      });
-      const response = await axios.post(
-        `http://localhost:3232/events/${id}/reviews`,
-        { ...newReview, userId: parseInt(userId || "0") }
-      );
-      console.log("Review response ini:", response.data);
-      setReviews([response.data, ...reviews]);
-      setNewReview({ rating: 0, comment: "" });
-    } catch (error) {
-      console.error("Failed to submit review:", error);
-    }
-  };
+  // const handleSubmitReview = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     const userId = localStorage.getItem("userId");
+  //     console.log("Submitting review with userId:", userId);
+  //     console.log("Full review data:", {
+  //       ...newReview,
+  //       userId: parseInt(userId || "0"),
+  //     });
+  //     const response = await axios.post(
+  //       `http://localhost:3232/events/${id}/reviews`,
+  //       { ...newReview, userId: parseInt(userId || "0") }
+  //     );
+  //     console.log("Review response ini:", response.data);
+  //     setReviews([response.data, ...reviews]);
+  //     setNewReview({ rating: 0, comment: "" });
+  //   } catch (error) {
+  //     console.error("Failed to submit review:", error);
+  //   }
+  // };
   // const userId = localStorage.getItem("userId");
   const handleEditClick = (review: Review) => {
     setEditingReview(review.id);
@@ -768,7 +768,7 @@ export default function EventDetailPage() {
           <h2 className="text-2xl font-semibold mb-6">Reviews</h2>
 
           {/* review form */}
-          {user.isAuth && user.role === "CUSTOMER" && (
+          {/* {user.isAuth && user.role === "CUSTOMER" && (
             <>
               <form onSubmit={handleSubmitReview} className="mb-8">
                 <div className="mb-4">
@@ -815,7 +815,7 @@ export default function EventDetailPage() {
                 </button>
               </form>
             </>
-          )}
+          )} */}
 
           {/* reviews list */}
           <div className="space-y-6">
