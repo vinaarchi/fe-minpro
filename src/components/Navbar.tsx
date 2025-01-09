@@ -217,7 +217,7 @@ const Navbar: React.FunctionComponent<any> = () => {
                     {user.isAuth && user.role === "CUSTOMER" && (
                       <>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
-                          <Link href="/explore-events">Jelajah</Link>
+                          <Link href="/events">Jelajah</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/member/tiket-saya">Tiket Saya</Link>
