@@ -3,23 +3,14 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { FaSearch, FaCalendarAlt, FaCompass, FaBars } from "react-icons/fa";
+import { FaSearch, FaBars } from "react-icons/fa";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { callAPI } from "@/config/axios";
 import { setSignIn } from "@/lib/redux/features/userSlice";
-import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-  DropdownMenuArrow,
-} from "@radix-ui/react-dropdown-menu";
 import NavbarOrganizer from "./OrganizerNavbar";
 import NavbarCustomer from "./CustomerNavbar";
-
 
 const Navbar: React.FunctionComponent<any> = () => {
   const router = useRouter();
