@@ -198,9 +198,9 @@ const Navbar: React.FunctionComponent<any> = () => {
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/organizer/dashboard">Dashboard</Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="p-2 rounded-md text-xs">
+                        {/* <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/member/event-list">Event Saya</Link>
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> */}
                         <DropdownMenuItem className="p-2 rounded-md text-xs">
                           <Link href="/organizer/informasi-dasar">
                             Informasi Dasar
