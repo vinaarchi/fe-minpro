@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { FaSearch, FaCalendarAlt, FaCompass, FaBars } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { LanguageContext } from "@/context/LanguageContext";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { callAPI } from "@/config/axios";
@@ -25,7 +25,7 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   const user = useAppSelector((state) => state.userReducer);
 
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [debouncedTerm, setDebouncedTerm] = useState(searchQuery);
   const dispatch = useAppDispatch();
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -39,16 +39,36 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   };
 
   //search
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
-    }
-  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedTerm(searchQuery);
+    }, 500);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (debouncedTerm.trim()) {
+      router.push(`/search?q=${encodeURIComponent(debouncedTerm)}`);
+    }
+  }, [debouncedTerm, router]);
+
+  const handleSearch = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      if (searchQuery.trim()) {
+        router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      }
+    },
+    [searchQuery, router]
+  );
+
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(e.target.value);
+    },
+    []
+  );
 
   const keepLogin = async () => {
     try {

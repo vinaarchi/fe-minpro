@@ -30,34 +30,31 @@ export default function ReviewPage({ params }: PageProps) {
   const [event, setEvent] = useState<Event | null>(null);
   const { eventId } = use(params);
 
-  if (!eventId || eventId === "undefined") {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-2">
-          Event ID Tidak Valid
-        </h2>
-        <p className="text-gray-500 mb-4">
-          Kami tidak menemukan event yang Anda cari.
-        </p>
-        <Link
-          href="/member/tiket-saya"
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          Kembali ke Tiket
-        </Link>
-      </div>
-    );
-  }
-
   useEffect(() => {
     const fetchEvent = async () => {
+      if (!eventId || eventId === "undefined") {
+        setError("Event ID tidak valid");
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await fetch(`http://localhost:3232/events/${eventId}`);
         if (!response.ok) throw new Error("Event not found");
         const data = await response.json();
+        //ini
+        const eventDate = new Date(data.date);
+        const now = new Date();
+
+        if (eventDate > now) {
+          setError("Anda bisa mereview event hanya setelah event dimulai.");
+          setLoading(false);
+          return;
+        }
+        //
         setEvent(data);
-      } catch (err) {
-        setError("Failed to load event details");
+      } catch {
+        setError("Gagal menampilkan detail event");
       } finally {
         setLoading(false);
       }
@@ -70,13 +67,13 @@ export default function ReviewPage({ params }: PageProps) {
     e.preventDefault();
 
     if (!rating) {
-      setError("Please select a rating");
+      setError("Tolong pilih rating.");
       return;
     }
 
     try {
       const userId = localStorage.getItem("userId");
-      const response = await fetch("http://localhost:3232/reviews", {
+      const response = await fetch(`http://localhost:3232/reviews`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,8 +90,8 @@ export default function ReviewPage({ params }: PageProps) {
         const data = await response.json();
         throw new Error(data.error);
       }
-
-      router.push("/member/tiket-saya");
+      //ini
+      router.push(`/event/${eventId}`);
     } catch (err: any) {
       setError(err.message);
     }
@@ -107,7 +104,21 @@ export default function ReviewPage({ params }: PageProps) {
       </div>
     );
   }
-
+  //ini
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-4">
+        <h2 className="text-2xl font-semibold text-gray-700 mb-2">{error}</h2>
+        <Link
+          href="/member/tiket-saya"
+          className="bg-customMediumBlue text-white px-6 py-2 rounded-lg hover:bg-customDarkBlue transition-colors"
+        >
+          Kembali ke Tiket
+        </Link>
+      </div>
+    );
+  }
+  //
   if (!event) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -126,12 +137,11 @@ export default function ReviewPage({ params }: PageProps) {
       </div>
     );
   }
-
   return (
     <AuthGuard allowedRoles={["CUSTOMER"]}>
       <div className="max-w-2xl mx-auto p-6">
         <h1 className="text-3xl font-bold mb-8">
-          Write a Review for {event.name}
+          Tulis review untuk {event.name}
         </h1>
 
         <div className="mb-6">
@@ -165,7 +175,7 @@ export default function ReviewPage({ params }: PageProps) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Your Review
+              Review Anda
             </label>
             <textarea
               value={comment}

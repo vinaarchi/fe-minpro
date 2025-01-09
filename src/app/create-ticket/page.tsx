@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, Suspense } from "react";
 import axios from "axios";
 import {
   Ticket,
@@ -30,7 +30,8 @@ interface TicketData {
   contactNumber: string;
 }
 
-export default function CreateTicketPage() {
+// export default function CreateTicketPage
+const TicketForm = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const eventId = searchParams.get("eventId");
@@ -363,5 +364,12 @@ export default function CreateTicketPage() {
         </div>
       </div>
     </div>
+  );
+};
+export default function CreateTicketPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <TicketForm />
+    </Suspense>
   );
 }

@@ -626,7 +626,7 @@ export default function EventDetailPage() {
                     onClick={() =>
                       router.push(`/create-promotion?eventId=${event.event_id}`)
                     }
-                    className="px-4 py-2 bg-customMediumBlue text-white rounded-md hover:bg-customDarkBlue"
+                    className="px-4 py-2 bg-customOrange text-white rounded-md hover:bg-[#f57b1d]"
                   >
                     Buat Promosi
                   </button>
@@ -767,7 +767,7 @@ export default function EventDetailPage() {
           <h2 className="text-2xl font-semibold mb-6">Reviews</h2>
 
           {/* review form */}
-          {user.isAuth && user.role === "CUSTOMER" && (
+          {/* {user.isAuth && user.role === "CUSTOMER" && (
             <>
               <form onSubmit={handleSubmitReview} className="mb-8">
                 <div className="mb-4">
@@ -814,7 +814,7 @@ export default function EventDetailPage() {
                 </button>
               </form>
             </>
-          )}
+          )} */}
 
           {/* reviews list */}
           <div className="space-y-6">

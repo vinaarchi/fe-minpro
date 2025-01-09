@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Image from "next/image";
 
 type Event = {
@@ -65,18 +65,24 @@ const EventsPage = () => {
     fetchEvents();
   }, [page, topic]);
 
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen p-8">
+  //       <div className="animate-pulse space-y-4">
+  //         {[...Array(5)].map((_, i) => (
+  //           <div key={i} className="bg-gray-200 h-48 rounded-lg"></div>
+  //         ))}
+  //       </div>
+  //     </div>
+  //   );
+  // }
   if (loading) {
     return (
-      <div className="min-h-screen p-8">
-        <div className="animate-pulse space-y-4">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="bg-gray-200 h-48 rounded-lg"></div>
-          ))}
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">Loading...</div>
       </div>
     );
   }
-
   return (
     <div className="min-h-screen p-8">
       <h1 className="text-4xl font-ibrand mb-8">

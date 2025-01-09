@@ -56,7 +56,7 @@ const SearchPage = () => {
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-6">
-        Hasil Pencarian untuk "{query}"
+        Hasil Pencarian untuk &quot;{query}&quot;
       </h1>
       {events.length === 0 ? (
         <p>Tidak ada events ditampilkan.</p>

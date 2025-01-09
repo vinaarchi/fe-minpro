@@ -156,10 +156,8 @@ export default function EditEventPage() {
         image: imageUrl,
       };
 
-      const response = await axios.patch(
-        `http://localhost:3232/events/${id}`,
-        updateData
-      );
+      // const response =
+      await axios.patch(`http://localhost:3232/events/${id}`, updateData);
 
       setSuccessMessage("Event updated successfully!");
 
